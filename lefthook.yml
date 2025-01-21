@@ -1,0 +1,28 @@
+pre-push:
+  commands:
+    run-lint:
+      run: composer lint
+    run-format:
+      run: composer format
+    run-tests:
+      run: composer test
+
+pre-commit:
+  parallel: true
+  commands:
+    lint:
+      glob: "*.php"
+      run: |
+        composer lint {staged_files}
+      stage_fixed: true
+      skip:
+        - merge
+        - rebase
+    format:
+      glob: "*.php"
+      run: |
+        composer format --config .php-cs-fixer.dist.php {staged_files}
+      stage_fixed: true
+      skip:
+        - merge
+        - rebase

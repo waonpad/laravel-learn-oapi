@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  laravel:
+    name: laravel
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version-file: ".php-version"
+          # カバレッジ取るために必要
+          extensions: pcov
+
+      - name: Install dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+      - name: Setup Laravel
+        run: composer run post-root-package-install && composer run post-create-project-cmd
+
+      # 自動で Files changed にアノテーションされる
+      - name: Run Lint
+        id: lint
+        continue-on-error: true
+        run: composer lint
+
+      - name: Run Format
+        id: format
+        continue-on-error: true
+        run: composer format
+
+      # フォーマットの修正をコメントする
+      - name: Suggest Fixes
+        uses: reviewdog/action-suggester@v1
+        with:
+          tool_name: php-cs-fixer
+
+      - name: Run Tests
+        id: test
+        continue-on-error: true
+        run: composer test:coverage
+
+      # テストカバレッジをコメントする
+      - name: Run Test Coverage Report
+        uses: k1LoW/octocov-action@v1
+
+      - name: Error Handling
+        if: steps.format.outcome == 'failure' || steps.lint.outcome == 'failure' || steps.test.outcome == 'failure'
+        run: exit 1
