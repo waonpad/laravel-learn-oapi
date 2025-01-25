@@ -42,12 +42,9 @@ class UpdatePostRequest extends CustomFormRequest
 
     public function validationData(): array
     {
-        $data = $this->all();
-        $data['path'] = [
-            'id' => $this->route('id'),
-        ];
-
-        return $data;
+        return array_merge(parent::validationData(), [
+            'path' => $this->route('id'),
+        ]);
     }
 
     public function makeInput(): UpdatePostDto

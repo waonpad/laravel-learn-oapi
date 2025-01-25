@@ -19,12 +19,9 @@ class IndexPostRequest extends CustomFormRequest
 
     public function validationData(): array
     {
-        $data = $this->all();
-        $data['query'] = [
-            'page' => $this->query('page') ?? 1,
-        ];
-
-        return $data;
+        return array_merge(parent::validationData(), [
+            'query' => $this->query('page'),
+        ]);
     }
 }
 

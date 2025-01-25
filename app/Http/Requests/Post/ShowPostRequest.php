@@ -19,12 +19,9 @@ class ShowPostRequest extends CustomFormRequest
 
     public function validationData(): array
     {
-        $data = $this->all();
-        $data['path'] = [
-            'id' => $this->route('id'),
-        ];
-
-        return $data;
+        return array_merge(parent::validationData(), [
+            'path' => $this->route('id'),
+        ]);
     }
 }
 
