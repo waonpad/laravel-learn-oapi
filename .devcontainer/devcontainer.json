@@ -39,6 +39,7 @@
       "extensions": [
         "junstyle.php-cs-fixer",
         "bmewburn.vscode-intelephense-client",
+        "DEVSENSE.phptools-vscode",
         "SanderRonde.phpstan-vscode"
       ]
     }
