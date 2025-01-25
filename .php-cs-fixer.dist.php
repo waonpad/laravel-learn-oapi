@@ -12,6 +12,7 @@ return (new Config())
     ->setRules([
         '@PhpCsFixer' => true,
         'declare_strict_types' => true,
+        'yoda_style' => false,
     ])
     ->setFinder(
         Finder::create()
