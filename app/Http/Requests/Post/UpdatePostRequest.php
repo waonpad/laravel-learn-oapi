@@ -10,6 +10,9 @@ use App\Models\Post;
 use Illuminate\Support\Facades\Gate;
 use OpenApi\Attributes as OA;
 
+/**
+ * @phpstan-type ValidatedUpdatePostRequest=array{content: string, path: array{id: non-empty-string}}
+ */
 #[OA\Schema(
     properties: [
         new OA\Property(
@@ -49,6 +52,7 @@ class UpdatePostRequest extends CustomFormRequest
 
     public function makeInput(): UpdatePostDto
     {
+        /** @var ValidatedUpdatePostRequest $validated */
         $validated = $this->validated();
 
         return new UpdatePostDto([

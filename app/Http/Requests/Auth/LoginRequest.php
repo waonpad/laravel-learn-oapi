@@ -8,6 +8,9 @@ use App\Http\DTO\Auth\LoginDto;
 use App\Http\Requests\CustomFormRequest;
 use OpenApi\Attributes as OA;
 
+/**
+ * @phpstan-type ValidatedLoginRequest=array{email: string, password: string}
+ */
 #[OA\Schema(
     properties: [
         new OA\Property(
@@ -35,6 +38,7 @@ class LoginRequest extends CustomFormRequest
 
     public function makeInput(): LoginDto
     {
+        /** @var ValidatedLoginRequest $validated */
         $validated = $this->validated();
 
         return new LoginDto([

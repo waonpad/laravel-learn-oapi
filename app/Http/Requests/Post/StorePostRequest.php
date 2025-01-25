@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use OpenApi\Attributes as OA;
 
+/**
+ * @phpstan-type ValidatedStorePostRequest=array{content: string}
+ */
 #[OA\Schema(
     properties: [
         new OA\Property(
@@ -45,6 +48,7 @@ class StorePostRequest extends CustomFormRequest
             throw new AuthenticationRequiredException();
         }
 
+        /** @var ValidatedStorePostRequest $validated */
         $validated = $this->validated();
 
         return new StorePostDto([
