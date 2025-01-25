@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Post;
 
+use App\Exceptions\AuthenticationRequiredException;
 use App\Http\DTO\Post\StorePostDto;
 use App\Http\Requests\CustomFormRequest;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use OpenApi\Attributes as OA;
@@ -36,11 +38,18 @@ class StorePostRequest extends CustomFormRequest
 
     public function makeInput(): StorePostDto
     {
+        /** @var null|User $user */
+        $user = Auth::user();
+
+        if ($user === null) {
+            throw new AuthenticationRequiredException();
+        }
+
         $validated = $this->validated();
 
         return new StorePostDto([
             'content' => $validated['content'],
-            'user_id' => Auth::user()->id,
+            'user_id' => $user->id,
         ]);
     }
 }
