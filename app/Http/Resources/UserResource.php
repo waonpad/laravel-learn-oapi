@@ -32,14 +32,6 @@ use OpenApi\Attributes as OA;
 )]
 class UserResource extends CustomJsonResource
 {
-    public int $id;
-
-    public string $name;
-
-    public string $email;
-
-    public string $emailVerifiedAt;
-
     public function toArray(Request $request): array|Arrayable|\JsonSerializable
     {
         return [
