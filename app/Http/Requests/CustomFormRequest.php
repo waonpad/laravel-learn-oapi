@@ -31,7 +31,7 @@ class CustomFormRequest extends FormRequest
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<mixed>
      */
     public function validationData(): array
     {
