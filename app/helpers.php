@@ -17,9 +17,9 @@ if (!function_exists('camelizeArrayRecursive')) {
         $results = [];
         foreach ($array as $key => $value) {
             if (is_array($value)) {
-                $results[Str::camel($key)] = camelizeArrayRecursive($value);
+                $results[Str::camel((string) $key)] = camelizeArrayRecursive($value);
             } else {
-                $results[Str::camel($key)] = $value;
+                $results[Str::camel((string) $key)] = $value;
             }
         }
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Resources;
 
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use OpenApi\Attributes as OA;
@@ -110,9 +111,9 @@ class CustomResourceCollection extends ResourceCollection
     /**
      * Transform the resource collection into an array.
      *
-     * @return array<int|string, mixed>
+     * @return array<int|string, mixed>|Arrayable<int|string, mixed>|\JsonSerializable
      */
-    public function toArray(Request $request): array
+    public function toArray(Request $request): array|Arrayable|\JsonSerializable
     {
         return parent::toArray($request);
     }
@@ -127,6 +128,7 @@ class CustomResourceCollection extends ResourceCollection
      */
     public function paginationInformation(Request $request, array $paginated, array $default): array
     {
+        // @phpstan-ignore return.type
         return camelizeArrayRecursive($default);
     }
 }

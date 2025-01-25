@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Resources;
 
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
 use OpenApi\Attributes as OA;
 
@@ -26,7 +27,7 @@ use OpenApi\Attributes as OA;
 )]
 class PostResource extends CustomJsonResource
 {
-    public function toArray(Request $request): array
+    public function toArray(Request $request): array|Arrayable|\JsonSerializable
     {
         return [
             'id' => $this->resource->id,
