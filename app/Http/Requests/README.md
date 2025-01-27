@@ -1,4 +1,4 @@
-#　Requestsディレクトリについて
+# Requestsディレクトリについて
 
 ## [zircote/swagger-php](https://github.com/zircote/swagger-php)の利用にあたり、PSR-4に準拠していない
 
