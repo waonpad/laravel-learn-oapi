@@ -22,19 +22,7 @@ final class UpdatePostControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testステータスコードが200(): void
-    {
-        $user = User::factory()->create();
-        $post = Post::factory()->create();
-
-        $response = $this->actingAs($user)->patchJson("/posts/{$post->id}", [
-            'content' => Str::random(),
-        ]);
-
-        $response->assertStatus(200);
-    }
-
-    public function testDBの対象レコードが更新される(): void
+    public function test投稿が更新されてステータスコードが200(): void
     {
         $beforeContent = Str::random();
         $afterContent = Str::random();
@@ -44,13 +32,79 @@ final class UpdatePostControllerTest extends TestCase
             'content' => $beforeContent,
         ]);
 
-        $this->actingAs($user)->patchJson("/posts/{$post->id}", [
+        $response = $this->actingAs($user)->patchJson("/posts/{$post->id}", [
             'content' => $afterContent,
         ]);
+
+        $response->assertStatus(200);
 
         $this->assertDatabaseHas('posts', [
             'id' => $post->id,
             'content' => $afterContent,
+        ]);
+    }
+
+    public function test未ログインの場合、投稿が更新されずステータスコードが401(): void
+    {
+        $beforeContent = Str::random();
+        $afterContent = Str::random();
+
+        User::factory()->create();
+        $post = Post::factory()->create([
+            'content' => $beforeContent,
+        ]);
+
+        $response = $this->patchJson("/posts/{$post->id}", [
+            'content' => $afterContent,
+        ]);
+
+        $response->assertStatus(401);
+
+        $this->assertDatabaseHas('posts', [
+            'id' => $post->id,
+            'content' => $beforeContent,
+        ]);
+    }
+
+    public function test他のユーザーの投稿が更新できずステータスコードが403(): void
+    {
+        $beforeContent = Str::random();
+        $afterContent = Str::random();
+
+        $user = User::factory()->create();
+        $otherUser = User::factory()->create();
+        $post = Post::factory()->create([
+            'user_id' => $otherUser->id,
+            'content' => $beforeContent,
+        ]);
+
+        $response = $this->actingAs($user)->patchJson("/posts/{$post->id}", [
+            'content' => $afterContent,
+        ]);
+
+        $response->assertStatus(403);
+
+        $this->assertDatabaseHas('posts', [
+            'id' => $post->id,
+            'content' => $beforeContent,
+        ]);
+    }
+
+    public function test存在しない投稿を更新しようとした場合、ステータスコードが404(): void
+    {
+        $notExistsPostId = 123;
+        $content = Str::random();
+
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->patchJson("/posts/{$notExistsPostId}", [
+            'content' => $content,
+        ]);
+
+        $response->assertStatus(404);
+
+        $this->assertDatabaseMissing('posts', [
+            'id' => $notExistsPostId,
         ]);
     }
 }

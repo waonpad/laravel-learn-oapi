@@ -21,28 +21,36 @@ final class StorePostControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testステータスコードが201(): void
+    public function test投稿が作成されてステータスコードが201(): void
     {
+        $content = Str::random();
+
         $user = User::factory()->create();
 
         $response = $this->actingAs($user)->postJson('/posts', [
-            'content' => Str::random(),
-        ]);
-
-        $response->assertStatus(201);
-    }
-
-    public function testDBにレコードが追加される(): void
-    {
-        $user = User::factory()->create();
-
-        $content = Str::random();
-
-        $this->actingAs($user)->postJson('/posts', [
             'content' => $content,
         ]);
 
+        $response->assertStatus(201);
+
         $this->assertDatabaseHas('posts', [
+            'content' => $content,
+        ]);
+    }
+
+    public function test未ログインの場合、投稿が作成されずステータスコードが401(): void
+    {
+        $content = Str::random();
+
+        User::factory()->create();
+
+        $response = $this->postJson('/posts', [
+            'content' => $content,
+        ]);
+
+        $response->assertStatus(401);
+
+        $this->assertDatabaseMissing('posts', [
             'content' => $content,
         ]);
     }
