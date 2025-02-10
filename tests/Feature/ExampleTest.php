@@ -5,22 +5,19 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 // use Illuminate\Foundation\Testing\RefreshDatabase;
+
+use App\Http\Controllers\ExampleController;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 use Tests\TestCase;
 
 /**
- * @coversDefaultClass \App\Http\Controllers\ExampleController
- *
- * @covers \App\Http\Controllers\ExampleController
- *
  * @internal
  */
+#[CoversClass(ExampleController::class)]
+#[CoversMethod(ExampleController::class, 'index')]
 final class ExampleTest extends TestCase
 {
-    /**
-     * A basic test example.
-     *
-     * @covers ::index
-     */
     public function testTheApplicationReturnsASuccessfulResponse(): void
     {
         $response = $this->get('/');
