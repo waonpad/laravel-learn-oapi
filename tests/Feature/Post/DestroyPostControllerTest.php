@@ -21,7 +21,7 @@ final class DestroyPostControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test正常(): void
+    public function testステータスコードが204(): void
     {
         $id = 1;
 
@@ -33,6 +33,18 @@ final class DestroyPostControllerTest extends TestCase
         $response = $this->actingAs($user)->deleteJson("/posts/{$id}");
 
         $response->assertStatus(204);
+    }
+
+    public function testDBの対象レコードが削除される(): void
+    {
+        $id = 1;
+
+        $user = User::factory()->create();
+        Post::factory()->create([
+            'id' => $id,
+        ]);
+
+        $this->actingAs($user)->deleteJson("/posts/{$id}");
 
         $this->assertDatabaseMissing('posts', [
             'id' => $id,

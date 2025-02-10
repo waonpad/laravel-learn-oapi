@@ -21,7 +21,7 @@ final class ShowPostControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test正常(): void
+    public function testステータスコードが200(): void
     {
         $id = 1;
 

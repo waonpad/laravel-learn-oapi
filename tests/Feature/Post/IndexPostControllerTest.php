@@ -21,7 +21,7 @@ final class IndexPostControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test正常(): void
+    public function testステータスコードが200(): void
     {
         User::factory()->create();
         Post::factory()->count(10)->create();

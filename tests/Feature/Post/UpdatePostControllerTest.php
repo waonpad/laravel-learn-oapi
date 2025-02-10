@@ -8,6 +8,7 @@ use App\Http\Controllers\Post\UpdatePostController;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Str;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use Tests\TestCase;
@@ -21,11 +22,28 @@ final class UpdatePostControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test正常(): void
+    public function testステータスコードが200(): void
     {
         $id = 1;
-        $beforeContent = 'content';
-        $afterContent = 'updated content';
+
+        $user = User::factory()->create();
+        Post::factory()->create([
+            'id' => $id,
+            'content' => Str::random(),
+        ]);
+
+        $response = $this->actingAs($user)->patchJson("/posts/{$id}", [
+            'content' => Str::random(),
+        ]);
+
+        $response->assertStatus(200);
+    }
+
+    public function testDBの対象レコードが更新される(): void
+    {
+        $id = 1;
+        $beforeContent = Str::random();
+        $afterContent = Str::random();
 
         $user = User::factory()->create();
         Post::factory()->create([
@@ -33,11 +51,9 @@ final class UpdatePostControllerTest extends TestCase
             'content' => $beforeContent,
         ]);
 
-        $response = $this->actingAs($user)->patchJson("/posts/{$id}", [
+        $this->actingAs($user)->patchJson("/posts/{$id}", [
             'content' => $afterContent,
         ]);
-
-        $response->assertStatus(200);
 
         $this->assertDatabaseHas('posts', [
             'id' => $id,
