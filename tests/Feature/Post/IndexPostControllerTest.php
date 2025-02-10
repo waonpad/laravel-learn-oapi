@@ -26,7 +26,7 @@ final class IndexPostControllerTest extends TestCase
         User::factory()->create();
         Post::factory()->count(10)->create();
 
-        $response = $this->get('/posts');
+        $response = $this->getJson('/posts');
 
         $response->assertStatus(200);
     }

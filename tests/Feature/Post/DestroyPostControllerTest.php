@@ -30,7 +30,7 @@ final class DestroyPostControllerTest extends TestCase
             'id' => $id,
         ]);
 
-        $response = $this->actingAs($user)->delete("/posts/{$id}");
+        $response = $this->actingAs($user)->deleteJson("/posts/{$id}");
 
         $response->assertStatus(204);
 

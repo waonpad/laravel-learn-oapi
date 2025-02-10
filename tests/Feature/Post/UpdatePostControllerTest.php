@@ -33,7 +33,7 @@ final class UpdatePostControllerTest extends TestCase
             'content' => $beforeContent,
         ]);
 
-        $response = $this->actingAs($user)->patch("/posts/{$id}", [
+        $response = $this->actingAs($user)->patchJson("/posts/{$id}", [
             'content' => $afterContent,
         ]);
 

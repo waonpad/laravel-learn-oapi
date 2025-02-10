@@ -30,7 +30,7 @@ final class ShowPostControllerTest extends TestCase
             'id' => $id,
         ]);
 
-        $response = $this->get("/posts/{$id}");
+        $response = $this->getJson("/posts/{$id}");
 
         $response->assertStatus(200);
     }

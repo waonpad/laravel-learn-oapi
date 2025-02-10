@@ -26,7 +26,7 @@ final class StorePostControllerTest extends TestCase
 
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->post('/posts', [
+        $response = $this->actingAs($user)->postJson('/posts', [
             'content' => $content,
         ]);
 
