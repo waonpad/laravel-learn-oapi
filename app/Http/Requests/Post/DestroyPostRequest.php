@@ -29,7 +29,9 @@ class DestroyPostRequest extends CustomFormRequest
     public function validationData(): array
     {
         return array_merge(parent::validationData(), [
-            'path' => $this->route('id'),
+            'path' => [
+                'id' => $this->route('id'),
+            ],
         ]);
     }
 }
