@@ -23,14 +23,10 @@ final class ShowPostControllerTest extends TestCase
 
     public function testステータスコードが200(): void
     {
-        $id = 1;
-
         User::factory()->create();
-        Post::factory()->create([
-            'id' => $id,
-        ]);
+        $post = Post::factory()->create();
 
-        $response = $this->getJson("/posts/{$id}");
+        $response = $this->getJson("/posts/{$post->id}");
 
         $response->assertStatus(200);
     }

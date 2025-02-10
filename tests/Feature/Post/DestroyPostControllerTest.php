@@ -23,31 +23,23 @@ final class DestroyPostControllerTest extends TestCase
 
     public function testステータスコードが204(): void
     {
-        $id = 1;
-
         $user = User::factory()->create();
-        Post::factory()->create([
-            'id' => $id,
-        ]);
+        $post = Post::factory()->create();
 
-        $response = $this->actingAs($user)->deleteJson("/posts/{$id}");
+        $response = $this->actingAs($user)->deleteJson("/posts/{$post->id}");
 
         $response->assertStatus(204);
     }
 
     public function testDBの対象レコードが削除される(): void
     {
-        $id = 1;
-
         $user = User::factory()->create();
-        Post::factory()->create([
-            'id' => $id,
-        ]);
+        $post = Post::factory()->create();
 
-        $this->actingAs($user)->deleteJson("/posts/{$id}");
+        $this->actingAs($user)->deleteJson("/posts/{$post->id}");
 
         $this->assertDatabaseMissing('posts', [
-            'id' => $id,
+            'id' => $post->id,
         ]);
     }
 }

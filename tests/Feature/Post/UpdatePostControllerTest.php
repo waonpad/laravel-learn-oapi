@@ -24,15 +24,10 @@ final class UpdatePostControllerTest extends TestCase
 
     public function testステータスコードが200(): void
     {
-        $id = 1;
-
         $user = User::factory()->create();
-        Post::factory()->create([
-            'id' => $id,
-            'content' => Str::random(),
-        ]);
+        $post = Post::factory()->create();
 
-        $response = $this->actingAs($user)->patchJson("/posts/{$id}", [
+        $response = $this->actingAs($user)->patchJson("/posts/{$post->id}", [
             'content' => Str::random(),
         ]);
 
@@ -41,22 +36,20 @@ final class UpdatePostControllerTest extends TestCase
 
     public function testDBの対象レコードが更新される(): void
     {
-        $id = 1;
         $beforeContent = Str::random();
         $afterContent = Str::random();
 
         $user = User::factory()->create();
-        Post::factory()->create([
-            'id' => $id,
+        $post = Post::factory()->create([
             'content' => $beforeContent,
         ]);
 
-        $this->actingAs($user)->patchJson("/posts/{$id}", [
+        $this->actingAs($user)->patchJson("/posts/{$post->id}", [
             'content' => $afterContent,
         ]);
 
         $this->assertDatabaseHas('posts', [
-            'id' => $id,
+            'id' => $post->id,
             'content' => $afterContent,
         ]);
     }
