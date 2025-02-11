@@ -10,7 +10,7 @@ use OpenApi\Generator;
 class ValidationErrorSchema extends Schema
 {
     /**
-     * @param list<string> $validationErrorProperties
+     * @param string[] $validationErrorProperties
      */
     public function __construct(
         array $validationErrorProperties,
