@@ -10,8 +10,6 @@ use Illuminate\Pagination\LengthAwarePaginator;
 class IndexPostAction
 {
     /**
-     * Execute the action.
-     *
      * @return LengthAwarePaginator<Post>
      */
     public function __invoke(): LengthAwarePaginator

@@ -8,9 +8,6 @@ use App\Models\Post;
 
 class DestroyPostAction
 {
-    /**
-     * Execute the action.
-     */
     public function __invoke(string $id): void
     {
         /** @var Post */

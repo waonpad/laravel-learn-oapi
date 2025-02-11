@@ -9,9 +9,6 @@ use App\Models\Post;
 
 class StorePostAction
 {
-    /**
-     * Execute the action.
-     */
     public function __invoke(StorePostDto $input): Post
     {
         return Post::create($input->toArray());

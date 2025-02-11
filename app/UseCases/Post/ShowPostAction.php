@@ -8,9 +8,6 @@ use App\Models\Post;
 
 class ShowPostAction
 {
-    /**
-     * Execute the action.
-     */
     public function __invoke(string $id): Post
     {
         return Post::findOrFail($id);

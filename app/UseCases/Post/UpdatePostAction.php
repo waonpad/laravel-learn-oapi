@@ -9,9 +9,6 @@ use App\Models\Post;
 
 class UpdatePostAction
 {
-    /**
-     * Execute the action.
-     */
     public function __invoke(string $id, UpdatePostDto $input): Post
     {
         /** @var Post */
