@@ -14,6 +14,7 @@ class UpdatePostAction
      */
     public function __invoke(string $id, UpdatePostDto $input): Post
     {
+        /** @var Post */
         $post = Post::findOrFail($id);
 
         $post->fill($input->toArray())->save();

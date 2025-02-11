@@ -14,10 +14,6 @@ class StorePostAction
      */
     public function __invoke(StorePostDto $input): Post
     {
-        $post = new Post();
-
-        $post->fill($input->toArray())->save();
-
-        return $post;
+        return Post::create($input->toArray());
     }
 }

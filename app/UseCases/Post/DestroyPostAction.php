@@ -13,7 +13,7 @@ class DestroyPostAction
      */
     public function __invoke(string $id): void
     {
-        /** @var Post $post */
+        /** @var Post */
         $post = Post::findOrFail($id);
         $post->delete();
     }
