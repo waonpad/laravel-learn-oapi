@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature\Post;
 
 use App\Http\Controllers\Post\StorePostController;
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
@@ -33,7 +34,7 @@ final class StorePostControllerTest extends TestCase
 
         $response->assertStatus(201);
 
-        $this->assertDatabaseHas('posts', [
+        $this->assertDatabaseHas(Post::class, [
             'content' => $content,
         ]);
     }
@@ -50,7 +51,7 @@ final class StorePostControllerTest extends TestCase
 
         $response->assertStatus(401);
 
-        $this->assertDatabaseMissing('posts', [
+        $this->assertDatabaseMissing(Post::class, [
             'content' => $content,
         ]);
     }

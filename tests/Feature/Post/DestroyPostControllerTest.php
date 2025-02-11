@@ -30,7 +30,7 @@ final class DestroyPostControllerTest extends TestCase
 
         $response->assertStatus(204);
 
-        $this->assertDatabaseMissing('posts', [
+        $this->assertDatabaseMissing(Post::class, [
             'id' => $post->id,
         ]);
     }
@@ -44,7 +44,7 @@ final class DestroyPostControllerTest extends TestCase
 
         $response->assertStatus(401);
 
-        $this->assertDatabaseHas('posts', [
+        $this->assertDatabaseHas(Post::class, [
             'id' => $post->id,
         ]);
     }
@@ -53,15 +53,15 @@ final class DestroyPostControllerTest extends TestCase
     {
         $user = User::factory()->create();
         $otherUser = User::factory()->create();
-        $post = Post::factory()->create([
-            'user_id' => $otherUser->id,
-        ]);
+
+        /** @var Post */
+        $post = $otherUser->posts()->save(Post::factory()->make());
 
         $response = $this->actingAs($user)->deleteJson("/posts/{$post->id}");
 
         $response->assertStatus(403);
 
-        $this->assertDatabaseHas('posts', [
+        $this->assertDatabaseHas(Post::class, [
             'id' => $post->id,
         ]);
     }
@@ -76,7 +76,7 @@ final class DestroyPostControllerTest extends TestCase
 
         $response->assertStatus(404);
 
-        $this->assertDatabaseMissing('posts', [
+        $this->assertDatabaseMissing(Post::class, [
             'id' => $notExistsPostId,
         ]);
     }
