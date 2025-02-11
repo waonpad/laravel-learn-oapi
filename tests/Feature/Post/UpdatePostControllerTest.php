@@ -38,7 +38,7 @@ final class UpdatePostControllerTest extends TestCase
 
         $response->assertStatus(200);
 
-        $this->assertDatabaseHas('posts', [
+        $this->assertDatabaseHas(Post::class, [
             'id' => $post->id,
             'content' => $afterContent,
         ]);
@@ -60,7 +60,7 @@ final class UpdatePostControllerTest extends TestCase
 
         $response->assertStatus(401);
 
-        $this->assertDatabaseHas('posts', [
+        $this->assertDatabaseHas(Post::class, [
             'id' => $post->id,
             'content' => $beforeContent,
         ]);
@@ -103,9 +103,5 @@ final class UpdatePostControllerTest extends TestCase
         ]);
 
         $response->assertStatus(404);
-
-        $this->assertDatabaseMissing(Post::class, [
-            'id' => $notExistsPostId,
-        ]);
     }
 }

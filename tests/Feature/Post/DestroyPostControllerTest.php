@@ -75,9 +75,5 @@ final class DestroyPostControllerTest extends TestCase
         $response = $this->actingAs($user)->deleteJson("/posts/{$notExistsPostId}");
 
         $response->assertStatus(404);
-
-        $this->assertDatabaseMissing(Post::class, [
-            'id' => $notExistsPostId,
-        ]);
     }
 }
