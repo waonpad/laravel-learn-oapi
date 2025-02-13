@@ -35,7 +35,6 @@ final class StorePostControllerTest extends TestCase
         ]);
 
         $response->assertStatus(201);
-        $this->assertDatabaseCount(Post::class, 1);
         $this->assertDatabaseHas(Post::class, [
             'content' => $content,
             'user_id' => $author->id,

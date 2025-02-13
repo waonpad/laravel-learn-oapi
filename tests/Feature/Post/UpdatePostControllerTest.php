@@ -8,6 +8,7 @@ use App\Http\Controllers\Post\UpdatePostController;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
@@ -28,18 +29,29 @@ final class UpdatePostControllerTest extends TestCase
         $afterContent = Str::random();
 
         $author = User::factory()->create();
+
+        // 投稿の作成日時を固定
+        $testCreatedAt = Carbon::now();
+        Carbon::setTestNow($testCreatedAt);
+
         $post = Post::factory()->create([
             'content' => $beforeContent,
         ]);
+
+        // 投稿の更新日時を固定
+        $testUpdatedAt = $testCreatedAt->copy()->addDay();
+        Carbon::setTestNow($testUpdatedAt);
 
         $response = $this->actingAs($author)->patchJson("/posts/{$post->id}", [
             'content' => $afterContent,
         ]);
 
         $response->assertStatus(200);
+        $this->assertModelExists($post);
         $this->assertDatabaseHas(Post::class, [
-            'id' => $post->id,
             'content' => $afterContent,
+            'created_at' => $testCreatedAt->toDateTimeString(),
+            'updated_at' => $testUpdatedAt->toDateTimeString(),
         ]);
     }
 
@@ -58,8 +70,8 @@ final class UpdatePostControllerTest extends TestCase
         ]);
 
         $response->assertStatus(401);
+        $this->assertModelExists($post);
         $this->assertDatabaseHas(Post::class, [
-            'id' => $post->id,
             'content' => $beforeContent,
         ]);
     }
@@ -82,8 +94,8 @@ final class UpdatePostControllerTest extends TestCase
         ]);
 
         $response->assertStatus(403);
+        $this->assertModelExists($post);
         $this->assertDatabaseHas(Post::class, [
-            'id' => $post->id,
             'content' => $beforeContent,
         ]);
     }

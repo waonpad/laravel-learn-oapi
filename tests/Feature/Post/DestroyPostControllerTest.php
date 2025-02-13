@@ -40,9 +40,7 @@ final class DestroyPostControllerTest extends TestCase
         $response = $this->deleteJson("/posts/{$post->id}");
 
         $response->assertStatus(401);
-        $this->assertDatabaseHas(Post::class, [
-            'id' => $post->id,
-        ]);
+        $this->assertModelExists($post);
     }
 
     public function test他のユーザーの投稿が削除できずステータスコードが403(): void
@@ -56,9 +54,7 @@ final class DestroyPostControllerTest extends TestCase
         $response = $this->actingAs($author)->deleteJson("/posts/{$post->id}");
 
         $response->assertStatus(403);
-        $this->assertDatabaseHas(Post::class, [
-            'id' => $post->id,
-        ]);
+        $this->assertModelExists($post);
     }
 
     public function test存在しない投稿を削除しようとした場合、ステータスコードが404(): void
