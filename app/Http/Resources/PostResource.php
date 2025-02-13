@@ -23,8 +23,16 @@ use OpenApi\Attributes as OA;
             property: 'userId',
             type: 'integer',
         ),
+        new OA\Property(
+            property: 'createdAt',
+            type: 'string',
+        ),
+        new OA\Property(
+            property: 'updatedAt',
+            type: 'string',
+        ),
     ],
-    required: ['id', 'content', 'userId'],
+    required: ['id', 'content', 'userId', 'createdAt', 'updatedAt'],
 )]
 class PostResource extends CustomJsonResource
 {
@@ -42,6 +50,8 @@ class PostResource extends CustomJsonResource
             'id' => $this->resource->id,
             'content' => $this->resource->content,
             'userId' => $this->resource->user_id,
+            'createdAt' => $this->resource->created_at,
+            'updatedAt' => $this->resource->updated_at,
         ];
     }
 }

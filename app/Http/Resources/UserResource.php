@@ -28,8 +28,16 @@ use OpenApi\Attributes as OA;
             property: 'emailVerifiedAt',
             type: 'string',
         ),
+        new OA\Property(
+            property: 'createdAt',
+            type: 'string',
+        ),
+        new OA\Property(
+            property: 'updatedAt',
+            type: 'string',
+        ),
     ],
-    required: ['id', 'name', 'email', 'emailVerifiedAt'],
+    required: ['id', 'name', 'email', 'emailVerifiedAt', 'createdAt', 'updatedAt'],
 )]
 class UserResource extends CustomJsonResource
 {
@@ -48,6 +56,8 @@ class UserResource extends CustomJsonResource
             'name' => $this->resource->name,
             'email' => $this->resource->email,
             'emailVerifiedAt' => $this->resource->email_verified_at,
+            'createdAt' => $this->resource->created_at,
+            'updatedAt' => $this->resource->updated_at,
         ];
     }
 }
