@@ -29,10 +29,7 @@ final class DestroyPostControllerTest extends TestCase
         $response = $this->actingAs($user)->deleteJson("/posts/{$post->id}");
 
         $response->assertStatus(204);
-
-        $this->assertDatabaseMissing(Post::class, [
-            'id' => $post->id,
-        ]);
+        $this->assertModelMissing($post);
     }
 
     public function test未ログインの場合、投稿が削除されずステータスコードが401(): void
@@ -43,7 +40,6 @@ final class DestroyPostControllerTest extends TestCase
         $response = $this->deleteJson("/posts/{$post->id}");
 
         $response->assertStatus(401);
-
         $this->assertDatabaseHas(Post::class, [
             'id' => $post->id,
         ]);
@@ -60,7 +56,6 @@ final class DestroyPostControllerTest extends TestCase
         $response = $this->actingAs($user)->deleteJson("/posts/{$post->id}");
 
         $response->assertStatus(403);
-
         $this->assertDatabaseHas(Post::class, [
             'id' => $post->id,
         ]);

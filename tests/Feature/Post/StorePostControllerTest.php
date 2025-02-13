@@ -8,6 +8,7 @@ use App\Http\Controllers\Post\StorePostController;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
@@ -25,6 +26,28 @@ final class StorePostControllerTest extends TestCase
     public function test投稿が作成されてステータスコードが201(): void
     {
         $content = Str::random();
+        // 投稿者作成
+        $user = User::factory()->create();
+        // 投稿の作成,更新日時を固定
+        Carbon::setTestNow(Carbon::now());
+
+        $response = $this->actingAs($user)->postJson('/posts', [
+            'content' => $content,
+        ]);
+
+        $response->assertStatus(201);
+        $this->assertDatabaseCount(Post::class, 1);
+        $this->assertDatabaseHas(Post::class, [
+            'content' => $content,
+            'user_id' => $user->id,
+            'created_at' => Carbon::now()->toDateTimeString(),
+            'updated_at' => Carbon::now()->toDateTimeString(),
+        ]);
+    }
+
+    public function test作成した投稿が返却されてステータスコードが201(): void
+    {
+        $content = Str::random();
 
         $user = User::factory()->create();
 
@@ -32,10 +55,16 @@ final class StorePostControllerTest extends TestCase
             'content' => $content,
         ]);
 
-        $response->assertStatus(201);
+        /** @var object{created_at: Carbon, updated_at: Carbon}&Post */
+        $createdPost = Post::firstOrFail();
 
-        $this->assertDatabaseHas(Post::class, [
+        $response->assertStatus(201);
+        $response->assertExactJson([
+            'id' => $createdPost->id,
             'content' => $content,
+            'userId' => $user->id,
+            'createdAt' => $createdPost->created_at->toISOString(),
+            'updatedAt' => $createdPost->updated_at->toISOString(),
         ]);
     }
 
@@ -50,9 +79,6 @@ final class StorePostControllerTest extends TestCase
         ]);
 
         $response->assertStatus(401);
-
-        $this->assertDatabaseMissing(Post::class, [
-            'content' => $content,
-        ]);
+        $this->assertDatabaseEmpty(Post::class);
     }
 }
