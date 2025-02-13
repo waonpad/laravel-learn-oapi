@@ -14,8 +14,12 @@ abstract class TestCase extends BaseTestCase
     /**
      * @param TestResponse<JsonResponse> $response
      */
-    public function assertJsonCommonErrorResponse(TestResponse $response): static
+    public function assertJsonCommonErrorResponse(TestResponse $response, ?int $status = null): static
     {
+        if ($status !== null) {
+            $response->assertStatus($status);
+        }
+
         $response->assertJson(
             fn (AssertableJson $json): AssertableJson => $json
                 ->whereType('message', 'string')

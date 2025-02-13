@@ -46,7 +46,6 @@ final class ShowPostControllerTest extends TestCase
 
         $response = $this->getJson("/posts/{$notExistsPostId}");
 
-        $response->assertStatus(404);
-        $this->assertJsonCommonErrorResponse($response);
+        $this->assertJsonCommonErrorResponse($response, 404);
     }
 }

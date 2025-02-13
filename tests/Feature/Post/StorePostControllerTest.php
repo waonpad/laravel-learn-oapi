@@ -76,8 +76,7 @@ final class StorePostControllerTest extends TestCase
             'content' => $content,
         ]);
 
-        $response->assertStatus(401);
-        $this->assertJsonCommonErrorResponse($response);
+        $this->assertJsonCommonErrorResponse($response, 401);
         $this->assertDatabaseEmpty(Post::class);
     }
 
