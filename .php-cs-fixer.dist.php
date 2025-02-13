@@ -13,6 +13,28 @@ return (new Config())
         '@PhpCsFixer' => true,
         'declare_strict_types' => true,
         'yoda_style' => false,
+        'blank_line_before_statement' => [
+            'statements' => [
+                'break',
+                'case',
+                'continue',
+                'declare',
+                'default',
+                'exit',
+                'goto',
+                'include',
+                'include_once',
+                // 'phpdoc',
+                'require',
+                'require_once',
+                'return',
+                'switch',
+                'throw',
+                'try',
+                'yield',
+                'yield_from',
+            ],
+        ],
     ])
     ->setFinder(
         Finder::create()

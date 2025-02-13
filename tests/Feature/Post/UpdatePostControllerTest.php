@@ -55,6 +55,33 @@ final class UpdatePostControllerTest extends TestCase
         ]);
     }
 
+    public function test更新した投稿が返却されてステータスコードが200(): void
+    {
+        $beforeContent = Str::random();
+        $afterContent = Str::random();
+
+        $author = User::factory()->create();
+        $post = Post::factory()->create([
+            'content' => $beforeContent,
+        ]);
+
+        $response = $this->actingAs($author)->patchJson("/posts/{$post->id}", [
+            'content' => $afterContent,
+        ]);
+
+        /** @var object{created_at: Carbon, updated_at: Carbon}&Post */
+        $updatedPost = Post::firstOrFail();
+
+        $response->assertStatus(200);
+        $response->assertExactJson([
+            'id' => $post->id,
+            'content' => $afterContent,
+            'userId' => $author->id,
+            'createdAt' => $updatedPost->created_at->toISOString(),
+            'updatedAt' => $updatedPost->updated_at->toISOString(),
+        ]);
+    }
+
     public function test未ログインの場合、投稿が更新されずステータスコードが401(): void
     {
         $beforeContent = Str::random();
@@ -82,14 +109,13 @@ final class UpdatePostControllerTest extends TestCase
         $afterContent = Str::random();
 
         $author = User::factory()->create();
-        $otherUser = User::factory()->create();
-
         /** @var Post */
-        $post = $otherUser->posts()->save(Post::factory()->make([
+        $post = $author->posts()->save(Post::factory()->make([
             'content' => $beforeContent,
         ]));
+        $otherUser = User::factory()->create();
 
-        $response = $this->actingAs($author)->patchJson("/posts/{$post->id}", [
+        $response = $this->actingAs($otherUser)->patchJson("/posts/{$post->id}", [
             'content' => $afterContent,
         ]);
 

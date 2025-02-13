@@ -46,12 +46,11 @@ final class DestroyPostControllerTest extends TestCase
     public function test他のユーザーの投稿が削除できずステータスコードが403(): void
     {
         $author = User::factory()->create();
+        /** @var Post */
+        $post = $author->posts()->save(Post::factory()->make());
         $otherUser = User::factory()->create();
 
-        /** @var Post */
-        $post = $otherUser->posts()->save(Post::factory()->make());
-
-        $response = $this->actingAs($author)->deleteJson("/posts/{$post->id}");
+        $response = $this->actingAs($otherUser)->deleteJson("/posts/{$post->id}");
 
         $response->assertStatus(403);
         $this->assertModelExists($post);
