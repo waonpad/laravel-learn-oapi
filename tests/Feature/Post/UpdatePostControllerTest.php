@@ -97,6 +97,7 @@ final class UpdatePostControllerTest extends TestCase
         ]);
 
         $response->assertStatus(401);
+        $this->assertCommonErrorJsonResponse($response);
         $this->assertModelExists($post);
         $this->assertDatabaseHas(Post::class, [
             'content' => $beforeContent,
@@ -120,6 +121,7 @@ final class UpdatePostControllerTest extends TestCase
         ]);
 
         $response->assertStatus(403);
+        $this->assertCommonErrorJsonResponse($response);
         $this->assertModelExists($post);
         $this->assertDatabaseHas(Post::class, [
             'content' => $beforeContent,
@@ -138,5 +140,6 @@ final class UpdatePostControllerTest extends TestCase
         ]);
 
         $response->assertStatus(404);
+        $this->assertCommonErrorJsonResponse($response);
     }
 }
