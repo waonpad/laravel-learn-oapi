@@ -27,12 +27,12 @@ final class UpdatePostControllerTest extends TestCase
         $beforeContent = Str::random();
         $afterContent = Str::random();
 
-        $user = User::factory()->create();
+        $author = User::factory()->create();
         $post = Post::factory()->create([
             'content' => $beforeContent,
         ]);
 
-        $response = $this->actingAs($user)->patchJson("/posts/{$post->id}", [
+        $response = $this->actingAs($author)->patchJson("/posts/{$post->id}", [
             'content' => $afterContent,
         ]);
 
@@ -69,7 +69,7 @@ final class UpdatePostControllerTest extends TestCase
         $beforeContent = Str::random();
         $afterContent = Str::random();
 
-        $user = User::factory()->create();
+        $author = User::factory()->create();
         $otherUser = User::factory()->create();
 
         /** @var Post */
@@ -77,7 +77,7 @@ final class UpdatePostControllerTest extends TestCase
             'content' => $beforeContent,
         ]));
 
-        $response = $this->actingAs($user)->patchJson("/posts/{$post->id}", [
+        $response = $this->actingAs($author)->patchJson("/posts/{$post->id}", [
             'content' => $afterContent,
         ]);
 
@@ -93,9 +93,9 @@ final class UpdatePostControllerTest extends TestCase
         $notExistsPostId = 123;
         $content = Str::random();
 
-        $user = User::factory()->create();
+        $author = User::factory()->create();
 
-        $response = $this->actingAs($user)->patchJson("/posts/{$notExistsPostId}", [
+        $response = $this->actingAs($author)->patchJson("/posts/{$notExistsPostId}", [
             'content' => $content,
         ]);
 

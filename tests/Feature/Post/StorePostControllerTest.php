@@ -26,12 +26,11 @@ final class StorePostControllerTest extends TestCase
     public function test投稿が作成されてステータスコードが201(): void
     {
         $content = Str::random();
-        // 投稿者作成
-        $user = User::factory()->create();
+        $author = User::factory()->create();
         // 投稿の作成,更新日時を固定
         Carbon::setTestNow(Carbon::now());
 
-        $response = $this->actingAs($user)->postJson('/posts', [
+        $response = $this->actingAs($author)->postJson('/posts', [
             'content' => $content,
         ]);
 
@@ -39,7 +38,7 @@ final class StorePostControllerTest extends TestCase
         $this->assertDatabaseCount(Post::class, 1);
         $this->assertDatabaseHas(Post::class, [
             'content' => $content,
-            'user_id' => $user->id,
+            'user_id' => $author->id,
             'created_at' => Carbon::now()->toDateTimeString(),
             'updated_at' => Carbon::now()->toDateTimeString(),
         ]);
@@ -49,9 +48,9 @@ final class StorePostControllerTest extends TestCase
     {
         $content = Str::random();
 
-        $user = User::factory()->create();
+        $author = User::factory()->create();
 
-        $response = $this->actingAs($user)->postJson('/posts', [
+        $response = $this->actingAs($author)->postJson('/posts', [
             'content' => $content,
         ]);
 
@@ -62,7 +61,7 @@ final class StorePostControllerTest extends TestCase
         $response->assertExactJson([
             'id' => $createdPost->id,
             'content' => $content,
-            'userId' => $user->id,
+            'userId' => $author->id,
             'createdAt' => $createdPost->created_at->toISOString(),
             'updatedAt' => $createdPost->updated_at->toISOString(),
         ]);

@@ -23,10 +23,10 @@ final class DestroyPostControllerTest extends TestCase
 
     public function test投稿が削除されてステータスコードが204(): void
     {
-        $user = User::factory()->create();
+        $author = User::factory()->create();
         $post = Post::factory()->create();
 
-        $response = $this->actingAs($user)->deleteJson("/posts/{$post->id}");
+        $response = $this->actingAs($author)->deleteJson("/posts/{$post->id}");
 
         $response->assertStatus(204);
         $this->assertModelMissing($post);
@@ -47,13 +47,13 @@ final class DestroyPostControllerTest extends TestCase
 
     public function test他のユーザーの投稿が削除できずステータスコードが403(): void
     {
-        $user = User::factory()->create();
+        $author = User::factory()->create();
         $otherUser = User::factory()->create();
 
         /** @var Post */
         $post = $otherUser->posts()->save(Post::factory()->make());
 
-        $response = $this->actingAs($user)->deleteJson("/posts/{$post->id}");
+        $response = $this->actingAs($author)->deleteJson("/posts/{$post->id}");
 
         $response->assertStatus(403);
         $this->assertDatabaseHas(Post::class, [
@@ -65,9 +65,9 @@ final class DestroyPostControllerTest extends TestCase
     {
         $notExistsPostId = 123;
 
-        $user = User::factory()->create();
+        $author = User::factory()->create();
 
-        $response = $this->actingAs($user)->deleteJson("/posts/{$notExistsPostId}");
+        $response = $this->actingAs($author)->deleteJson("/posts/{$notExistsPostId}");
 
         $response->assertStatus(404);
     }
