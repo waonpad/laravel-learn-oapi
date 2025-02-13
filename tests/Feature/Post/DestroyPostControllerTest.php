@@ -40,7 +40,7 @@ final class DestroyPostControllerTest extends TestCase
         $response = $this->deleteJson("/posts/{$post->id}");
 
         $response->assertStatus(401);
-        $this->assertCommonErrorJsonResponse($response);
+        $this->assertJsonCommonErrorResponse($response);
         $this->assertModelExists($post);
     }
 
@@ -54,7 +54,7 @@ final class DestroyPostControllerTest extends TestCase
         $response = $this->actingAs($otherUser)->deleteJson("/posts/{$post->id}");
 
         $response->assertStatus(403);
-        $this->assertCommonErrorJsonResponse($response);
+        $this->assertJsonCommonErrorResponse($response);
         $this->assertModelExists($post);
     }
 
@@ -67,6 +67,6 @@ final class DestroyPostControllerTest extends TestCase
         $response = $this->actingAs($author)->deleteJson("/posts/{$notExistsPostId}");
 
         $response->assertStatus(404);
-        $this->assertCommonErrorJsonResponse($response);
+        $this->assertJsonCommonErrorResponse($response);
     }
 }

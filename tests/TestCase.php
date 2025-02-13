@@ -14,11 +14,25 @@ abstract class TestCase extends BaseTestCase
     /**
      * @param TestResponse<JsonResponse> $response
      */
-    public function assertCommonErrorJsonResponse(TestResponse $response): static
+    public function assertJsonCommonErrorResponse(TestResponse $response): static
     {
         $response->assertJson(
             fn (AssertableJson $json): AssertableJson => $json
                 ->whereType('message', 'string')
+        );
+
+        return $this;
+    }
+
+    /**
+     * @param TestResponse<JsonResponse> $response
+     */
+    public function assertJsonValidationErrorsResponse(TestResponse $response): static
+    {
+        $response->assertJson(
+            fn (AssertableJson $json): AssertableJson => $json
+                ->whereType('message', 'string')
+                ->whereType('errors', 'array')
         );
 
         return $this;

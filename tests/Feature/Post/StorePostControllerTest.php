@@ -77,7 +77,36 @@ final class StorePostControllerTest extends TestCase
         ]);
 
         $response->assertStatus(401);
-        $this->assertCommonErrorJsonResponse($response);
+        $this->assertJsonCommonErrorResponse($response);
+        $this->assertDatabaseEmpty(Post::class);
+    }
+
+    public function testコンテンツが空の場合、投稿が作成されずステータスコードが422(): void
+    {
+        $author = User::factory()->create();
+
+        $response = $this->actingAs($author)->postJson('/posts', [
+            'content' => '',
+        ]);
+
+        $response->assertStatus(422);
+        $this->assertJsonValidationErrorsResponse($response);
+        $response->assertJsonValidationErrors('content');
+        $this->assertDatabaseEmpty(Post::class);
+    }
+
+    public function testコンテンツが255文字より多い場合、投稿が作成されずステータスコードが422(): void
+    {
+        $content = Str::random(256);
+        $author = User::factory()->create();
+
+        $response = $this->actingAs($author)->postJson('/posts', [
+            'content' => $content,
+        ]);
+
+        $response->assertStatus(422);
+        $this->assertJsonValidationErrorsResponse($response);
+        $response->assertJsonValidationErrors('content');
         $this->assertDatabaseEmpty(Post::class);
     }
 }
