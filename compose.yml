@@ -15,7 +15,7 @@ services:
     command: >
       /bin/bash -c
       "composer install
-      && npm install
+      && bun install
       && composer run post-root-package-install
       && composer run post-create-project-cmd
       && lefthook install

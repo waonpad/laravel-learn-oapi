@@ -20,8 +20,10 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     git \
     unzip \
     libzip-dev \
-    nodejs \
-    npm \
     lefthook \
     && docker-php-ext-install zip pcntl \
     && pecl install pcov && docker-php-ext-enable pcov
+
+RUN curl -fsSL https://bun.sh/install | bash
+
+ENV PATH /root/.bun/bin:$PATH
