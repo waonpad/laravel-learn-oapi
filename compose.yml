@@ -12,14 +12,6 @@ services:
       - 8000:8000
     tty: true
     stdin_open: true
-    command: >
-      /bin/bash -c
-      "composer install
-      && bun install
-      && composer run post-root-package-install
-      && composer run post-create-project-cmd
-      && lefthook install
-      && /bin/bash"
 
 volumes:
   vendor-store:

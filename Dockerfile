@@ -2,8 +2,8 @@ FROM dunglas/frankenphp:1.3.6-php8.3.15
 
 WORKDIR /workspace
 
-ENV TZ Asia/Tokyo
-ENV COMPOSER_ALLOW_SUPERUSER 1
+ENV TZ=Asia/Tokyo
+ENV COMPOSER_ALLOW_SUPERUSER=1
 
 # install composer
 COPY --from=composer /usr/bin/composer /usr/bin/composer
@@ -26,4 +26,6 @@ RUN composer install --no-dev
 # init
 RUN composer run post-root-package-install && composer run post-create-project-cmd
 
-CMD composer run start
+EXPOSE 8000
+
+CMD ["composer", "run-prod"]

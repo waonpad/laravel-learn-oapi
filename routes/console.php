@@ -3,10 +3,9 @@
 declare(strict_types=1);
 
 use Illuminate\Console\Command;
-use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 
-Artisan::command('inspire', function () {
+Artisan::command('validate-app-key', function () {
     /**
      * @var Command $command
      *
@@ -14,5 +13,17 @@ Artisan::command('inspire', function () {
      */
     $command = $this;
 
-    $command->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote')->hourly();
+    $command->comment('Validating APP_KEY...');
+
+    $appKey = getenv('APP_KEY');
+
+    if ($appKey === '') {
+        $command->error('APP_KEY is not set');
+
+        return 1;
+    }
+
+    $command->comment('APP_KEY is valid');
+
+    return 0;
+})->purpose('Validate APP_KEY')->daily();

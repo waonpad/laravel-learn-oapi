@@ -2,17 +2,33 @@
 
 ## セットアップ
 
-### DevContainer を起動して PHP のコンテナに入る
+### コンテナを起動する
 
-VSCode の拡張機能を使う
+Dev Container を起動してコマンドの実行を代替しても良い
 
-### サーバーの起動
+```bash
+docker compose up -d
+```
+
+### セットアップスクリプトを実行する
+
+コンテナ内で
+
+```bash
+composer setup
+```
+
+### Laravelのアプリケーションを起動する
 
 コンテナ内で
 
 ```bash
 composer dev
 ```
+
+#### Swagger UI を確認できる
+
+http://localhost:8000/api/documentation
 
 ## 本番環境
 

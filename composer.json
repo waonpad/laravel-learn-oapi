@@ -54,13 +54,48 @@
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
         ],
-        "post-root-package-install": [
-            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
-        ],
-        "post-create-project-cmd": [
+        "setup": [
+            "echo \"依存パッケージをインストール\"",
+            "composer install",
+            "bun install",
+
+            "echo \"Git Hooks をインストール\"",
+            "lefthook install",
+
+            "echo \"環境変数の設定ファイルが存在しない場合は 元となるファイルをコピーして作成\"",
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
+
+            "echo \"アプリケーションキーを生成\"",
             "@php artisan key:generate --ansi",
+
+            "echo \"データベースファイルが存在しない場合は作成\"",
             "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
+
+            "echo \"マイグレーション\"",
             "@php artisan migrate --graceful --ansi"
+        ],
+        "run-prod": [
+            "echo \"依存パッケージをインストール\"",
+            "composer install --no-dev",
+
+            "echo \"環境変数の設定ファイルが存在しない場合は 元となるファイルをコピーして作成\"",
+            "@php -r \"file_exists('.env.production') || copy('.env.example.production', '.env.production');\"",
+
+            "echo \"アプリケーションキーの検証\"",
+            "php artisan validate-app-key --ansi --env=production",
+
+            "echo \"データベースファイルが存在しない場合は作成\"",
+            "@php -r \"file_exists('database/database.production.sqlite') || touch('database/database.production.sqlite');\"",
+
+            "echo \"マイグレーション\"",
+            "@php artisan migrate --graceful --ansi --env=production",
+
+            "echo \"データをキャッシュ\"",
+            "php artisan optimize --ansi --env=production",
+
+            "echo \"サーバー起動\"",
+            "Composer\\Config::disableProcessTimeout",
+            "php artisan octane:start --host 0.0.0.0 --env=production"
         ],
         "dev": [
             "Composer\\Config::disableProcessTimeout",

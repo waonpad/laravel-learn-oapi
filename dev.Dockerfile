@@ -2,8 +2,8 @@ FROM dunglas/frankenphp:1.3.6-php8.3.15
 
 WORKDIR /workspace
 
-ENV TZ Asia/Tokyo
-ENV COMPOSER_ALLOW_SUPERUSER 1
+ENV TZ=Asia/Tokyo
+ENV COMPOSER_ALLOW_SUPERUSER=1
 
 # install composer
 COPY --from=composer /usr/bin/composer /usr/bin/composer
@@ -26,4 +26,4 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 
 RUN curl -fsSL https://bun.sh/install | bash
 
-ENV PATH /root/.bun/bin:$PATH
+CMD ["/bin/bash"]
