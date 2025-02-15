@@ -66,7 +66,7 @@ class ValidationErrorSchema extends Schema
                 property: 'errors',
                 type: 'object',
                 properties: array_map(
-                    fn (string $validationErrorProperty) => new Property(property: $validationErrorProperty, type: 'string'),
+                    fn (string $validationErrorProperty) => new Property(property: $validationErrorProperty, type: 'array', items: new Items(type: 'string')),
                     $validationErrorProperties
                 )
             ),
