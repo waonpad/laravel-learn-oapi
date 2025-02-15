@@ -35,6 +35,6 @@ steps:
 images:
   - 'gcr.io/${PROJECT_ID}/${_SERVICE_NAME}:${COMMIT_SHA}'
 substitutions:
-  _SERVICE_NAME: 'my-service4'
+  _SERVICE_NAME: 'my-service'
   _SERVICE_REGION: 'asia-northeast1'
   _APP_KEY: 'base64:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx='

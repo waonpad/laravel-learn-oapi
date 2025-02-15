@@ -36,7 +36,7 @@ http://localhost:8000/api/documentation
 
 ### プロジェクトの作成
 
-作成してCLIのデフォルトプロジェクトに設定する
+プロジェクトを作成し、CLIのデフォルトプロジェクトに設定する
 
 ```bash
 PROJECT_ID=<プロジェクトID> && gcloud projects create $PROJECT_ID && gcloud config set project $PROJECT_ID
