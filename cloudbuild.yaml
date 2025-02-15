@@ -1,0 +1,40 @@
+steps:
+  # gcloud run deploy の --env-vars-file に渡すためのファイルを生成
+  - name: 'bash'
+    script: |
+      sed -i "s/^APP_KEY=.*/APP_KEY=${_APP_KEY}/" .env.example.production
+      cp .env.example.production .env.production
+      ./env2yml-linux-amd64 .env.production
+    automapSubstitutions: true
+  # コンテナイメージをビルド
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/${PROJECT_ID}/${_SERVICE_NAME}:${COMMIT_SHA}', '.']
+  # コンテナイメージをレジストリにプッシュ
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/${PROJECT_ID}/${_SERVICE_NAME}:${COMMIT_SHA}']
+  # Cloud Run にデプロイ
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+    - 'run'
+    - 'deploy'
+    - '${_SERVICE_NAME}'
+    - '--image'
+    - 'gcr.io/${PROJECT_ID}/${_SERVICE_NAME}:${COMMIT_SHA}'
+    - '--port'
+    - '8000'
+    - '--region'
+    - '${_SERVICE_REGION}'
+    - '--env-vars-file'
+    - '.env.production.yml'
+    # 誰でもアクセス可能にする
+    - '--allow-unauthenticated'
+    # SQLiteを使用する都合上、データの不整合を防ぐために最大インスタンス数を1にする
+    - '--max-instances'
+    - '1'
+images:
+  - 'gcr.io/${PROJECT_ID}/${_SERVICE_NAME}:${COMMIT_SHA}'
+substitutions:
+  _SERVICE_NAME: 'my-service4'
+  _SERVICE_REGION: 'asia-northeast1'
+  _APP_KEY: 'base64:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx='
