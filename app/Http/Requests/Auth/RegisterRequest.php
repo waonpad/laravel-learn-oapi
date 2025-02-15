@@ -6,6 +6,7 @@ namespace App\Http\Requests\Auth;
 
 use App\Http\DTO\Auth\RegisterDto;
 use App\Http\Requests\CustomFormRequest;
+use Illuminate\Validation\Rule;
 use OpenApi\Attributes as OA;
 
 /**
@@ -42,7 +43,7 @@ class RegisterRequest extends CustomFormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email'],
+            'email' => ['required', 'string', 'email', Rule::unique('users')],
             'password' => ['required', 'string', 'confirmed', 'min:8'],
         ];
     }

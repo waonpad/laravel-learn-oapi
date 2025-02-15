@@ -11,7 +11,6 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use OpenApi\Attributes as OA;
 use OpenApi\SchemaDefinitions\Responses\InternalServerError;
-use OpenApi\SchemaDefinitions\Responses\Unauthorized;
 
 class RegisterController extends Controller
 {
@@ -41,7 +40,6 @@ class RegisterController extends Controller
                 description: '',
                 content: new OA\JsonContent(ref: RegisterRequestBodyValidationError::class)
             ),
-            new OA\Response(response: 401, ref: Unauthorized::class),
             new OA\Response(response: 500, ref: InternalServerError::class),
         ]
     )]
