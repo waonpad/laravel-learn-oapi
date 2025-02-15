@@ -91,7 +91,10 @@
             "@php artisan migrate --graceful --ansi --force --env=production",
 
             "echo \"データをキャッシュ\"",
-            "php artisan optimize --ansi --env=production"
+            "php artisan optimize --ansi --env=production",
+
+            "echo \"Swagger ドキュメントを生成\"",
+            "php artisan l5-swagger:generate --env=production"
         ],
         "dev": [
             "Composer\\Config::disableProcessTimeout",
