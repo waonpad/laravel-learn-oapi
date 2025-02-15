@@ -20,12 +20,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # copy source
 COPY . /workspace
 
-# install composer dependencies
-RUN composer install --no-dev
-
-# init
-RUN composer run post-root-package-install && composer run post-create-project-cmd
+RUN composer setup:prod
 
 EXPOSE 8000
 
-CMD ["composer", "run-prod"]
+CMD ["composer", "start:prod"]

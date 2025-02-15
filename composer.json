@@ -74,7 +74,7 @@
             "echo \"マイグレーション\"",
             "@php artisan migrate --graceful --ansi"
         ],
-        "run-prod": [
+        "setup:prod": [
             "echo \"依存パッケージをインストール\"",
             "composer install --no-dev",
 
@@ -88,14 +88,10 @@
             "@php -r \"file_exists('database/database.production.sqlite') || touch('database/database.production.sqlite');\"",
 
             "echo \"マイグレーション\"",
-            "@php artisan migrate --graceful --ansi --env=production",
+            "@php artisan migrate --graceful --ansi --force --env=production",
 
             "echo \"データをキャッシュ\"",
-            "php artisan optimize --ansi --env=production",
-
-            "echo \"サーバー起動\"",
-            "Composer\\Config::disableProcessTimeout",
-            "php artisan octane:start --host 0.0.0.0 --env=production"
+            "php artisan optimize --ansi --env=production"
         ],
         "dev": [
             "Composer\\Config::disableProcessTimeout",
@@ -104,6 +100,10 @@
         "start": [
             "Composer\\Config::disableProcessTimeout",
             "php artisan octane:start --host 0.0.0.0"
+        ],
+        "start:prod": [
+            "Composer\\Config::disableProcessTimeout",
+            "php artisan octane:start --host 0.0.0.0 --env=production"
         ],
         "lint": [
             "./vendor/bin/phpstan analyze --memory-limit=2G"

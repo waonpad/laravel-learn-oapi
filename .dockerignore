@@ -24,8 +24,25 @@ yarn-error.log
 
 /.php-cs-fixer.cache
 
+# FrankenPHP
 **/caddy
 frankenphp
-frankenphp-worker.php
+**/frankenphp-worker.php
 
+# Coverage
 coverage.xml
+
+# L5 Swagger
+/storage/api-docs
+
+# SQLite database files
+**/*.sqlite
+
+# Cache
+bootstrap/cache/*.php
+
+# Logs
+**/*.log
+
+# Git
+/.git
