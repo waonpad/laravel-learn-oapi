@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ShowAuthUserController;
 use App\Http\Controllers\ExampleController;
 use App\Http\Controllers\Post\DestroyPostController;
@@ -34,6 +35,7 @@ Route::prefix('posts')->group(function (): void {
     Route::delete('/{id}', DestroyPostController::class)->middleware('auth:sanctum');
 });
 
+Route::post('/register', RegisterController::class);
 Route::post('/login', LoginController::class);
 Route::get('/me', ShowAuthUserController::class)->middleware('auth:sanctum');
 Route::post('/logout', LogoutController::class)->middleware('auth:sanctum');
