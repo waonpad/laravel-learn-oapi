@@ -125,7 +125,7 @@ gcloud projects add-iam-policy-binding $(gcloud config get-value project) \
 コマンドを実行し、表示されたURLにアクセスしてCloud Build GitHub アプリを承認する
 
 ```bash
-gcloud builds connections create github <コネクション名> --region=asia-northeast1
+gcloud builds connections create github <コネクション名> --region=asia-east1
 ```
 
 ### GitHub リポジトリを接続
@@ -133,7 +133,7 @@ gcloud builds connections create github <コネクション名> --region=asia-no
 ```bash
 gcloud builds repositories create <任意のリポジトリ名> \
   --remote-uri=$(git config --get remote.origin.url) \
-  --connection=<コネクション名> --region=asia-northeast1
+  --connection=<コネクション名> --region=asia-east1
 ```
 
 ### ビルドトリガーを作成
@@ -144,11 +144,11 @@ PROJECT_NUMBER=$(gcloud projects describe $(gcloud config get-value project) --f
 SERVICE_ACCOUNT=${PROJECT_NUMBER}-compute@developer.gserviceaccount.com
 gcloud builds triggers create github \
   --name=trigger \
-  --region=asia-northeast1 \
+  --region=asia-east1 \
   --require-approval \
   --include-logs-with-status \
   --build-config=cloudbuild.yaml \
-  --repository=projects/${PROJECT_ID}/locations/asia-northeast1/connections/<コネクション名>/repositories/<リポジトリ名> \
+  --repository=projects/${PROJECT_ID}/locations/asia-east1/connections/<コネクション名>/repositories/<リポジトリ名> \
   --branch-pattern=^release$ \
   --service-account=projects/${PROJECT_ID}/serviceAccounts/${SERVICE_ACCOUNT} \
   --substitutions=_GC_STORAGE_SQLITE_BUCKET=<バケット名>,_GC_STORAGE_BUILD_LOG_BUCKET=<バケット名>
@@ -157,14 +157,14 @@ gcloud builds triggers create github \
 #### 既存のビルドトリガーを確認する方法
 
 ```bash
-gcloud builds triggers list --region=asia-northeast1
+gcloud builds triggers list --region=asia-east1
 ```
 
 ### デプロイ
 
 ```bash
 gcloud builds submit \
-  --region=asia-northeast1 \
+  --region=asia-east1 \
   --substitutions COMMIT_SHA='local',_GC_STORAGE_SQLITE_BUCKET=<バケット名>,_GC_STORAGE_BUILD_LOG_BUCKET=<バケット名>
 ```
 
@@ -172,5 +172,5 @@ gcloud builds submit \
 
 ```bash
 gcloud builds submit \
-  --region=asia-northeast1 \
+  --region=asia-east1 \
   --substitutions COMMIT_SHA='local',_GC_STORAGE_SQLITE_BUCKET=<バケット名>,_GC_STORAGE_BUILD_LOG_BUCKET=<バケット名>,_APP_KEY=<APP_KEY>
