@@ -68,7 +68,7 @@ gcloud services enable run.googleapis.com cloudbuild.googleapis.com
 gcloud storage buckets create gs://<バケット名> --location=asia-northeast1
 ```
 
-### LiteStream　を使用するため、Cloud Storage のバケットを作成する
+### LiteStream を使用するため、Cloud Storage のバケットを作成する
 
 ```bash
 gcloud storage buckets create gs://<バケット名> --location=asia-northeast1
@@ -138,7 +138,7 @@ gcloud projects add-iam-policy-binding $(gcloud config get-value project) \
 
 ### GitHub への接続を作成
 
-コマンドを実行し、表示されたURLにアクセスしてCloud Build GitHub アプリを承認する。
+コマンドを実行し、表示されたURLにアクセスして Cloud Build GitHub アプリを承認する。
 
 ```bash
 gcloud builds connections create github <コネクション名> --region=asia-east1
@@ -182,6 +182,6 @@ gcloud builds triggers list --region=asia-east1
 
 ### メモ
 
-### Cloud Build　のリージョンに asia-east1 を指定する理由
+### Cloud Build のリージョンに asia-east1 を指定する理由
 
 [一部のプロジェクトに対する制限付きリージョン](https://cloud.google.com/build/docs/locations?hl=ja#restricted_regions_for_some_projects)
