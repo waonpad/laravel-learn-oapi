@@ -94,10 +94,10 @@ gcloud projects add-iam-policy-binding $(gcloud config get-value project) --memb
 ### デプロイ
 
 ```bash
-gcloud builds submit --substitutions COMMIT_SHA='local',_GCS_SQLITE_BUCKET=<バケット名>
+gcloud builds submit --substitutions COMMIT_SHA='local',_GC_STORAGE_SQLITE_BUCKET=<バケット名>
 ```
 
 デフォルトでは`APP_KEY`を`cloudbuild.yaml`にハードコードしているため、実運用では別で生成したものを固定して使用する
 
 ```bash
-gcloud builds submit --substitutions COMMIT_SHA='local',,_GCS_SQLITE_BUCKET=<バケット名>_APP_KEY=<APP_KEY>
+gcloud builds submit --substitutions COMMIT_SHA='local',,_GC_STORAGE_SQLITE_BUCKET=<バケット名>_APP_KEY=<APP_KEY>

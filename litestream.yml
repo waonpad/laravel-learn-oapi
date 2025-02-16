@@ -4,5 +4,5 @@ dbs:
     replicas:
       # この設定により gs://<バケット名>/database.production.sqlite にデータベースファイルがレプリケートされる
       - type: gcs # レプリケート先のタイプ
-        bucket: ${GCS_SQLITE_BUCKET} # バケット名 （環境変数から取得）
+        bucket: ${GC_STORAGE_SQLITE_BUCKET} # バケット名 （環境変数から取得）
         path: database.production.sqlite # レプリケート先のパス
