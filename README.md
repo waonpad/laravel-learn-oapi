@@ -4,7 +4,7 @@
 
 ### コンテナを起動する
 
-Dev Container を起動してコマンドの実行を代替しても良い
+Dev Container を起動してコマンドの実行を代替しても良い。
 
 ```bash
 docker compose up -d
@@ -36,10 +36,10 @@ http://localhost:8000/api/documentation
 
 ### プロジェクトの作成
 
-プロジェクトを作成し、CLIのデフォルトプロジェクトに設定する
+プロジェクトを作成し、CLIのデフォルトプロジェクトに設定する。
 
 ```bash
-PROJECT_ID=<プロジェクトID> && gcloud projects create $PROJECT_ID && gcloud config set project $PROJECT_ID
+PROJECT_ID=<プロジェクトID> && gcloud projects create ${PROJECT_ID} && gcloud config set project ${PROJECT_ID}
 ```
 
 ### プロジェクトの課金を有効にする
@@ -103,6 +103,22 @@ gcloud projects add-iam-policy-binding $(gcloud config get-value project) \
   --role=roles/storage.admin
 ```
 
+### デプロイ
+
+```bash
+gcloud builds submit \
+  --region=asia-east1 \
+  --substitutions COMMIT_SHA='local',_GC_STORAGE_SQLITE_BUCKET=<バケット名>,_GC_STORAGE_BUILD_LOG_BUCKET=<バケット名>
+```
+
+デフォルトでは`APP_KEY`を`cloudbuild.yaml`にハードコードしているため、実運用では別で生成したものを固定して使用する。
+
+```bash
+gcloud builds submit \
+  --region=asia-east1 \
+  --substitutions COMMIT_SHA='local',_GC_STORAGE_SQLITE_BUCKET=<バケット名>,_GC_STORAGE_BUILD_LOG_BUCKET=<バケット名>,_APP_KEY=<APP_KEY>
+```
+
 ### GitHub との連携を行う場合の追加手順
 
 #### Secret Manager API を有効にする
@@ -122,7 +138,7 @@ gcloud projects add-iam-policy-binding $(gcloud config get-value project) \
 
 ### GitHub への接続を作成
 
-コマンドを実行し、表示されたURLにアクセスしてCloud Build GitHub アプリを承認する
+コマンドを実行し、表示されたURLにアクセスしてCloud Build GitHub アプリを承認する。
 
 ```bash
 gcloud builds connections create github <コネクション名> --region=asia-east1
@@ -137,6 +153,10 @@ gcloud builds repositories create <任意のリポジトリ名> \
 ```
 
 ### ビルドトリガーを作成
+
+`--branch-pattern`に指定したブランチに push された際にビルドが実行される。
+
+`--require-approval`を指定した事により、Google Cloud Console でビルドの承認を行う必要がある。
 
 ```bash
 PROJECT_ID=$(gcloud config get-value project)
@@ -160,17 +180,8 @@ gcloud builds triggers create github \
 gcloud builds triggers list --region=asia-east1
 ```
 
-### デプロイ
+### メモ
 
-```bash
-gcloud builds submit \
-  --region=asia-east1 \
-  --substitutions COMMIT_SHA='local',_GC_STORAGE_SQLITE_BUCKET=<バケット名>,_GC_STORAGE_BUILD_LOG_BUCKET=<バケット名>
-```
+### Cloud Build　のリージョンに asia-east1 を指定する理由
 
-デフォルトでは`APP_KEY`を`cloudbuild.yaml`にハードコードしているため、実運用では別で生成したものを固定して使用する
-
-```bash
-gcloud builds submit \
-  --region=asia-east1 \
-  --substitutions COMMIT_SHA='local',_GC_STORAGE_SQLITE_BUCKET=<バケット名>,_GC_STORAGE_BUILD_LOG_BUCKET=<バケット名>,_APP_KEY=<APP_KEY>
+[一部のプロジェクトに対する制限付きリージョン](https://cloud.google.com/build/docs/locations?hl=ja#restricted_regions_for_some_projects)

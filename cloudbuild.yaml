@@ -1,3 +1,15 @@
+substitutions:
+  _SERVICE_NAME: 'my-service'
+  _SERVICE_REGION: 'asia-northeast1'
+  _APP_KEY: 'base64:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx='
+images:
+  - 'gcr.io/${PROJECT_ID}/${_SERVICE_NAME}:${COMMIT_SHA}'
+# gcloud builds triggers create でトリガーを作成する際にサービスアカウントの指定が必須になっており、
+# サービスアカウントを指定した場合はビルドログの保存先を指定する必要がある
+# https://zenn.dev/link/comments/56536c4c04f42c
+logsBucket: gs://${_GC_STORAGE_BUILD_LOG_BUCKET}
+options:
+  logging: GCS_ONLY
 steps:
   # gcloud run deploy の --env-vars-file に渡すためのファイルを生成
   - name: 'bash'
@@ -33,12 +45,3 @@ steps:
     # SQLiteを使用する都合上、データの不整合を防ぐために最大インスタンス数を1にする
     - '--max-instances'
     - '1'
-images:
-  - 'gcr.io/${PROJECT_ID}/${_SERVICE_NAME}:${COMMIT_SHA}'
-logsBucket: gs://${_GC_STORAGE_BUILD_LOG_BUCKET}
-options:
-  logging: GCS_ONLY
-substitutions:
-  _SERVICE_NAME: 'my-service'
-  _SERVICE_REGION: 'asia-northeast1'
-  _APP_KEY: 'base64:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx='
