@@ -30,12 +30,12 @@ use OpenApi\Attributes as OA;
             example: 'password',
         ),
         new OA\Property(
-            property: 'password_confirmation',
+            property: 'passwordConfirmation',
             type: 'string',
             example: 'password',
         ),
     ],
-    required: ['name', 'email', 'password', 'password_confirmation'],
+    required: ['name', 'email', 'password', 'passwordConfirmation'],
 )]
 class RegisterRequest extends CustomFormRequest
 {
@@ -46,6 +46,13 @@ class RegisterRequest extends CustomFormRequest
             'email' => ['required', 'string', 'email', Rule::unique('users')],
             'password' => ['required', 'string', 'confirmed', 'min:8'],
         ];
+    }
+
+    public function validationData(): array
+    {
+        return array_merge(parent::validationData(), [
+            'password_confirmation' => $this->input('passwordConfirmation'),
+        ]);
     }
 
     public function makeInput(): RegisterDto
