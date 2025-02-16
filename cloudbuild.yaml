@@ -35,6 +35,9 @@ steps:
     - '1'
 images:
   - 'gcr.io/${PROJECT_ID}/${_SERVICE_NAME}:${COMMIT_SHA}'
+logsBucket: 'gs://build-logs'
+options:
+  logging: GCS_ONLY
 substitutions:
   _SERVICE_NAME: 'my-service'
   _SERVICE_REGION: 'asia-northeast1'
