@@ -24,11 +24,16 @@ yarn-error.log
 
 /.php-cs-fixer.cache
 
+# FrankenPHP
 **/caddy
 frankenphp
 frankenphp-worker.php
 
+# Coverage
 coverage.xml
 
 # L5 Swagger
 /storage/api-docs
+
+# Google Cloud
+.env.gcloud

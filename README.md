@@ -62,6 +62,12 @@ gcloud beta billing projects link $(gcloud config get-value project) --billing-a
 gcloud services enable run.googleapis.com cloudbuild.googleapis.com
 ```
 
+### ビルドログを保存するための Cloud Storage バケットを作成する
+
+```bash
+gcloud storage buckets create gs://<バケット名> --location=asia-northeast1
+```
+
 ### LiteStream　を使用するため、Cloud Storage のバケットを作成する
 
 ```bash
@@ -145,7 +151,7 @@ gcloud builds triggers create github \
   --repository=projects/${PROJECT_ID}/locations/asia-northeast1/connections/<コネクション名>/repositories/<リポジトリ名> \
   --branch-pattern=^release$ \
   --service-account=projects/${PROJECT_ID}/serviceAccounts/${SERVICE_ACCOUNT} \
-  --substitutions=_GC_STORAGE_SQLITE_BUCKET=<バケット名>
+  --substitutions=_GC_STORAGE_SQLITE_BUCKET=<バケット名>,_GC_STORAGE_BUILD_LOG_BUCKET=<バケット名>
 ```
 
 #### 既存のビルドトリガーを確認する方法
@@ -159,7 +165,7 @@ gcloud builds triggers list --region=asia-northeast1
 ```bash
 gcloud builds submit \
   --region=asia-northeast1 \
-  --substitutions COMMIT_SHA='local',_GC_STORAGE_SQLITE_BUCKET=<バケット名>
+  --substitutions COMMIT_SHA='local',_GC_STORAGE_SQLITE_BUCKET=<バケット名>,_GC_STORAGE_BUILD_LOG_BUCKET=<バケット名>
 ```
 
 デフォルトでは`APP_KEY`を`cloudbuild.yaml`にハードコードしているため、実運用では別で生成したものを固定して使用する
@@ -167,4 +173,4 @@ gcloud builds submit \
 ```bash
 gcloud builds submit \
   --region=asia-northeast1 \
-  --substitutions COMMIT_SHA='local',_GC_STORAGE_SQLITE_BUCKET=<バケット名>,_APP_KEY=<APP_KEY>
+  --substitutions COMMIT_SHA='local',_GC_STORAGE_SQLITE_BUCKET=<バケット名>,_GC_STORAGE_BUILD_LOG_BUCKET=<バケット名>,_APP_KEY=<APP_KEY>

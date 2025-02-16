@@ -35,7 +35,7 @@ steps:
     - '1'
 images:
   - 'gcr.io/${PROJECT_ID}/${_SERVICE_NAME}:${COMMIT_SHA}'
-logsBucket: 'gs://build-logs'
+logsBucket: gs://${_GC_STORAGE_BUILD_LOG_BUCKET}
 options:
   logging: GCS_ONLY
 substitutions:
