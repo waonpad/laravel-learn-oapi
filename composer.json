@@ -74,28 +74,6 @@
             "echo \"マイグレーション\"",
             "@php artisan migrate --graceful --ansi"
         ],
-        "setup:prod": [
-            "echo \"依存パッケージをインストール\"",
-            "composer install --no-dev",
-
-            "echo \"環境変数の設定ファイルが存在しない場合は 元となるファイルをコピーして作成\"",
-            "@php -r \"file_exists('.env.production') || copy('.env.example.production', '.env.production');\"",
-
-            "echo \"アプリケーションキーの検証\"",
-            "php artisan validate-app-key --ansi --env=production",
-
-            "echo \"データベースファイルが存在しない場合は作成\"",
-            "@php -r \"file_exists('database/database.production.sqlite') || touch('database/database.production.sqlite');\"",
-
-            "echo \"マイグレーション\"",
-            "@php artisan migrate --graceful --ansi --force --env=production",
-
-            "echo \"データをキャッシュ\"",
-            "php artisan optimize --ansi --env=production",
-
-            "echo \"Swagger ドキュメントを生成\"",
-            "php artisan l5-swagger:generate --env=production"
-        ],
         "dev": [
             "Composer\\Config::disableProcessTimeout",
             "bunx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan octane:start --watch --host 0.0.0.0\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\""
@@ -105,8 +83,24 @@
             "php artisan octane:start --host 0.0.0.0"
         ],
         "start:prod": [
+            "echo \"アプリケーションキーの検証\"",
+            "php artisan validate-app-key --ansi --env=production",
+
+            "echo \"Litestream レプリケーションを復元\"",
+            "litestream restore -if-replica-exists -config litestream.yml database/database.production.sqlite",
+
+            "echo \"マイグレーション\"",
+            "@php artisan migrate --graceful --ansi --force --env=production",
+
+            "echo \"データをキャッシュ\"",
+            "php artisan optimize --ansi --env=production",
+
+            "echo \"Swagger ドキュメントを生成\"",
+            "php artisan l5-swagger:generate --env=production",
+
+            "echo \"アプリケーションを起動\"",
             "Composer\\Config::disableProcessTimeout",
-            "php artisan octane:start --host 0.0.0.0 --env=production"
+            "litestream replicate -exec 'php artisan octane:start --host 0.0.0.0 --env=production' -config litestream.yml"
         ],
         "lint": [
             "./vendor/bin/phpstan analyze --memory-limit=2G"

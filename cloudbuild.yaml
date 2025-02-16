@@ -3,6 +3,7 @@ steps:
   - name: 'bash'
     script: |
       sed -i "s/^APP_KEY=.*/APP_KEY=${_APP_KEY}/" .env.example.production
+      sed -i "s/^GCS_SQLITE_BUCKET=.*/GCS_SQLITE_BUCKET=${_GCS_SQLITE_BUCKET}/" .env.example.production
       cp .env.example.production .env.production
       ./env2yml-linux-amd64 .env.production
     automapSubstitutions: true

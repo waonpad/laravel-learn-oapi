@@ -17,10 +17,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libzip-dev \
     && docker-php-ext-install zip pcntl
 
+# Litestream CLI のバージョンを指定
+ENV LITESTREAM_VERSION=v0.3.13
+
+# Litestream CLI をインストール
+ADD https://github.com/benbjohnson/litestream/releases/download/$LITESTREAM_VERSION/litestream-$LITESTREAM_VERSION-linux-amd64.tar.gz /tmp/litestream.tar.gz
+RUN tar -C /usr/local/bin -xzf /tmp/litestream.tar.gz
+
 # copy source
 COPY . /workspace
 
-RUN composer setup:prod
+RUN composer install --no-dev
 
 EXPOSE 8000
 
