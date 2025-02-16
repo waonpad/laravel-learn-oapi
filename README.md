@@ -74,30 +74,97 @@ gcloud storage buckets create gs://<バケット名> --location=asia-northeast1
 
 ```bash
 PROJECT_NUMBER=$(gcloud projects describe $(gcloud config get-value project) --format='value(projectNumber)')
-gcloud projects add-iam-policy-binding $(gcloud config get-value project) --member=serviceAccount:${PROJECT_NUMBER}-compute@developer.gserviceaccount.com --role=roles/cloudbuild.builds.editor
+gcloud projects add-iam-policy-binding $(gcloud config get-value project) \
+  --member=serviceAccount:${PROJECT_NUMBER}-compute@developer.gserviceaccount.com \
+  --role=roles/cloudbuild.builds.editor
 ```
 
 #### Cloud Run のサービスに誰でもアクセス可能にする設定を行うためのロール
 
 ```bash
 PROJECT_NUMBER=$(gcloud projects describe $(gcloud config get-value project) --format='value(projectNumber)')
-gcloud projects add-iam-policy-binding $(gcloud config get-value project) --member=serviceAccount:${PROJECT_NUMBER}-compute@developer.gserviceaccount.com --role=roles/cloudfunctions.admin
+gcloud projects add-iam-policy-binding $(gcloud config get-value project) \
+  --member=serviceAccount:${PROJECT_NUMBER}-compute@developer.gserviceaccount.com \
+  --role=roles/cloudfunctions.admin
 ```
 
 #### Litestream が Google Cloud Storage に読み書きするためのロール
 
 ```bash
 PROJECT_NUMBER=$(gcloud projects describe $(gcloud config get-value project) --format='value(projectNumber)')
-gcloud projects add-iam-policy-binding $(gcloud config get-value project) --member=serviceAccount:${PROJECT_NUMBER}-compute@developer.gserviceaccount.com --role=roles/storage.admin
+gcloud projects add-iam-policy-binding $(gcloud config get-value project) \
+  --member=serviceAccount:${PROJECT_NUMBER}-compute@developer.gserviceaccount.com \
+  --role=roles/storage.admin
+```
+
+### GitHub との連携を行う場合の追加手順
+
+#### Secret Manager API を有効にする
+
+```bash
+gcloud services enable secretmanager.googleapis.com
+```
+
+#### Secret Manager にアクセスするためのロールを付与する
+
+```bash
+PROJECT_NUMBER=$(gcloud projects describe $(gcloud config get-value project) --format="value(projectNumber)")
+gcloud projects add-iam-policy-binding $(gcloud config get-value project) \
+  --member=serviceAccount:service-${PROJECT_NUMBER}@gcp-sa-cloudbuild.iam.gserviceaccount.com \
+  --role=roles/secretmanager.admin
+```
+
+### GitHub への接続を作成
+
+コマンドを実行し、表示されたURLにアクセスしてCloud Build GitHub アプリを承認する
+
+```bash
+gcloud builds connections create github <コネクション名> --region=asia-northeast1
+```
+
+### GitHub リポジトリを接続
+
+```bash
+gcloud builds repositories create <任意のリポジトリ名> \
+  --remote-uri=$(git config --get remote.origin.url) \
+  --connection=<コネクション名> --region=asia-northeast1
+```
+
+### ビルドトリガーを作成
+
+```bash
+PROJECT_ID=$(gcloud config get-value project)
+PROJECT_NUMBER=$(gcloud projects describe $(gcloud config get-value project) --format='value(projectNumber)')
+SERVICE_ACCOUNT=${PROJECT_NUMBER}-compute@developer.gserviceaccount.com
+gcloud builds triggers create github \
+  --name=trigger \
+  --region=asia-northeast1 \
+  --require-approval \
+  --include-logs-with-status \
+  --build-config=cloudbuild.yaml \
+  --repository=projects/${PROJECT_ID}/locations/asia-northeast1/connections/<コネクション名>/repositories/<リポジトリ名> \
+  --branch-pattern=^release$ \
+  --service-account=projects/${PROJECT_ID}/serviceAccounts/${SERVICE_ACCOUNT} \
+  --substitutions=_GC_STORAGE_SQLITE_BUCKET=<バケット名>
+```
+
+#### 既存のビルドトリガーを確認する方法
+
+```bash
+gcloud builds triggers list --region=asia-northeast1
 ```
 
 ### デプロイ
 
 ```bash
-gcloud builds submit --substitutions COMMIT_SHA='local',_GC_STORAGE_SQLITE_BUCKET=<バケット名>
+gcloud builds submit \
+  --region=asia-northeast1 \
+  --substitutions COMMIT_SHA='local',_GC_STORAGE_SQLITE_BUCKET=<バケット名>
 ```
 
 デフォルトでは`APP_KEY`を`cloudbuild.yaml`にハードコードしているため、実運用では別で生成したものを固定して使用する
 
 ```bash
-gcloud builds submit --substitutions COMMIT_SHA='local',,_GC_STORAGE_SQLITE_BUCKET=<バケット名>_APP_KEY=<APP_KEY>
+gcloud builds submit \
+  --region=asia-northeast1 \
+  --substitutions COMMIT_SHA='local',_GC_STORAGE_SQLITE_BUCKET=<バケット名>,_APP_KEY=<APP_KEY>
