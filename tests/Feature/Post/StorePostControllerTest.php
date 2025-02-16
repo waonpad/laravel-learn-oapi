@@ -90,7 +90,7 @@ final class StorePostControllerTest extends TestCase
 
         $response->assertStatus(422);
         $this->assertJsonValidationErrorsResponse($response);
-        $response->assertJsonValidationErrors('content');
+        $response->assertJsonValidationErrors(['content']);
         $this->assertDatabaseEmpty(Post::class);
     }
 
@@ -105,7 +105,7 @@ final class StorePostControllerTest extends TestCase
 
         $response->assertStatus(422);
         $this->assertJsonValidationErrorsResponse($response);
-        $response->assertJsonValidationErrors('content');
+        $response->assertJsonValidationErrors(['content']);
         $this->assertDatabaseEmpty(Post::class);
     }
 }
