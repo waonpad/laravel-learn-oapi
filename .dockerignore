@@ -46,3 +46,6 @@ bootstrap/cache/*.php
 
 # Git
 /.git
+
+# Google Cloud
+.env.gcloud
