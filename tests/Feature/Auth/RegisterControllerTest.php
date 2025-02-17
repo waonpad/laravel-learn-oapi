@@ -76,11 +76,8 @@ final class RegisterControllerTest extends TestCase
     {
         $name = Str::random();
         $email = Str::random().'@example.com';
-
-        $passwordLength = 8;
-
-        $password = Str::random($passwordLength);
-        $invalidPassword = Str::random($passwordLength + 1);
+        $password = Str::random(8);
+        $invalidPassword = "invalid{$password}";
 
         $response = $this->postJson('/register', [
             'name' => $name,
