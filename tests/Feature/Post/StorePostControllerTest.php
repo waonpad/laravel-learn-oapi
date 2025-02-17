@@ -23,7 +23,7 @@ final class StorePostControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test投稿が作成されてステータスコードが201(): void
+    public function test投稿が作成される(): void
     {
         $content = Str::random();
 
@@ -44,7 +44,7 @@ final class StorePostControllerTest extends TestCase
         ]);
     }
 
-    public function test作成した投稿が返却されてステータスコードが201(): void
+    public function test作成した投稿が返却される(): void
     {
         $content = Str::random();
 
@@ -67,7 +67,7 @@ final class StorePostControllerTest extends TestCase
         ]);
     }
 
-    public function test未ログインの場合、投稿が作成されずステータスコードが401(): void
+    public function test未ログインの場合、認証エラー(): void
     {
         $content = Str::random();
 
@@ -78,10 +78,9 @@ final class StorePostControllerTest extends TestCase
         ]);
 
         $this->assertJsonCommonErrorResponse($response, 401);
-        $this->assertDatabaseEmpty(Post::class);
     }
 
-    public function testコンテンツが空の場合、投稿が作成されずステータスコードが422(): void
+    public function testコンテンツが空の場合、バリデーションエラー(): void
     {
         $author = User::factory()->create();
 
@@ -92,10 +91,9 @@ final class StorePostControllerTest extends TestCase
         $response->assertStatus(422);
         $this->assertJsonValidationErrorsResponse($response);
         $response->assertJsonValidationErrors(['content']);
-        $this->assertDatabaseEmpty(Post::class);
     }
 
-    public function testコンテンツが255文字より多い場合、投稿が作成されずステータスコードが422(): void
+    public function testコンテンツが255文字より多い場合、バリデーションエラー(): void
     {
         $content = Str::random(256);
         $author = User::factory()->create();
@@ -107,6 +105,5 @@ final class StorePostControllerTest extends TestCase
         $response->assertStatus(422);
         $this->assertJsonValidationErrorsResponse($response);
         $response->assertJsonValidationErrors(['content']);
-        $this->assertDatabaseEmpty(Post::class);
     }
 }

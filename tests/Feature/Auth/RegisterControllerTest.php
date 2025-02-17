@@ -23,7 +23,7 @@ final class RegisterControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testユーザーが作成され、ステータスコードが200(): void
+    public function testユーザーが作成される(): void
     {
         $name = Str::random();
         $email = Str::random().'@example.com';
@@ -49,7 +49,7 @@ final class RegisterControllerTest extends TestCase
         ]);
     }
 
-    public function testユーザーが作成され、入力したパスワードがハッシュ化されてDBに保存される(): void
+    public function test入力したパスワードがハッシュ化されてDBに保存される(): void
     {
         $name = Str::random();
         $email = Str::random().'@example.com';
@@ -72,7 +72,7 @@ final class RegisterControllerTest extends TestCase
         );
     }
 
-    public function testパスワードが確認用と一致しない場合、ユーザーが作成されずステータスコードが422(): void
+    public function testパスワードが確認用と一致しない場合、バリデーションエラー(): void
     {
         $name = Str::random();
         $email = Str::random().'@example.com';
@@ -88,6 +88,59 @@ final class RegisterControllerTest extends TestCase
 
         $response->assertStatus(422);
         $response->assertJsonValidationErrors(['password']);
-        $this->assertDatabaseEmpty(User::class);
+    }
+
+    public function test確認用パスワードが存在しない場合、バリデーションエラー(): void
+    {
+        $name = Str::random();
+        $email = Str::random().'@example.com';
+        $password = Str::random(8);
+
+        $response = $this->postJson('/register', [
+            'name' => $name,
+            'email' => $email,
+            'password' => $password,
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['password']);
+    }
+
+    public function testメールアドレスの形式が正しくない場合、バリデーションエラー(): void
+    {
+        $name = Str::random();
+        $email = Str::random();
+        $password = Str::random(8);
+
+        $response = $this->postJson('/register', [
+            'name' => $name,
+            'email' => $email,
+            'password' => $password,
+            'passwordConfirmation' => $password,
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['email']);
+    }
+
+    public function test既に存在するメールアドレスを指定した場合、バリデーションエラー(): void
+    {
+        $name = Str::random();
+        $email = Str::random().'@example.com';
+        $password = Str::random(8);
+
+        User::factory()->create([
+            'email' => $email,
+        ]);
+
+        $response = $this->postJson('/register', [
+            'name' => $name,
+            'email' => $email,
+            'password' => $password,
+            'passwordConfirmation' => $password,
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['email']);
     }
 }

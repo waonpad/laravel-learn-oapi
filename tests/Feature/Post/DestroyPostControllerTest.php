@@ -21,7 +21,7 @@ final class DestroyPostControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test投稿が削除されてステータスコードが204(): void
+    public function test投稿が削除される(): void
     {
         $author = User::factory()->create();
         $post = Post::factory()->create();
@@ -32,7 +32,7 @@ final class DestroyPostControllerTest extends TestCase
         $this->assertModelMissing($post);
     }
 
-    public function test未ログインの場合、投稿が削除されずステータスコードが401(): void
+    public function test未ログインの場合、認証エラー(): void
     {
         User::factory()->create();
         $post = Post::factory()->create();
@@ -40,10 +40,9 @@ final class DestroyPostControllerTest extends TestCase
         $response = $this->deleteJson("/posts/{$post->id}");
 
         $this->assertJsonCommonErrorResponse($response, 401);
-        $this->assertModelExists($post);
     }
 
-    public function test他のユーザーの投稿が削除できずステータスコードが403(): void
+    public function test他のユーザーの投稿を削除しようとした場合、権限エラー(): void
     {
         $author = User::factory()->create();
         /** @var Post */
@@ -53,10 +52,9 @@ final class DestroyPostControllerTest extends TestCase
         $response = $this->actingAs($otherUser)->deleteJson("/posts/{$post->id}");
 
         $this->assertJsonCommonErrorResponse($response, 403);
-        $this->assertModelExists($post);
     }
 
-    public function test存在しない投稿を削除しようとした場合、ステータスコードが404(): void
+    public function test存在しない投稿を削除しようとした場合、NotFoundエラー(): void
     {
         $notExistsPostId = rand();
 

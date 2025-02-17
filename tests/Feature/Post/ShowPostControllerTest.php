@@ -22,7 +22,7 @@ final class ShowPostControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test投稿が取得され、ステータスコードが200(): void
+    public function test投稿が取得される(): void
     {
         User::factory()->create();
         /** @var object{created_at: Carbon, updated_at: Carbon}&Post */
@@ -40,7 +40,7 @@ final class ShowPostControllerTest extends TestCase
         ]);
     }
 
-    public function test存在しない投稿IDを指定した場合、ステータスコードが404(): void
+    public function test存在しない投稿IDを指定した場合、NotFoundエラー(): void
     {
         $notExistsPostId = rand();
 

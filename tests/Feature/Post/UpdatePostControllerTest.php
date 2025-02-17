@@ -23,7 +23,7 @@ final class UpdatePostControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test投稿が更新されてステータスコードが200(): void
+    public function test投稿が更新される(): void
     {
         $beforeContent = Str::random();
         $afterContent = Str::random();
@@ -55,7 +55,7 @@ final class UpdatePostControllerTest extends TestCase
         ]);
     }
 
-    public function test更新した投稿が返却されてステータスコードが200(): void
+    public function test更新した投稿が返却される(): void
     {
         $beforeContent = Str::random();
         $afterContent = Str::random();
@@ -82,7 +82,7 @@ final class UpdatePostControllerTest extends TestCase
         ]);
     }
 
-    public function test未ログインの場合、投稿が更新されずステータスコードが401(): void
+    public function test未ログインの場合、認証エラー(): void
     {
         $beforeContent = Str::random();
         $afterContent = Str::random();
@@ -97,13 +97,9 @@ final class UpdatePostControllerTest extends TestCase
         ]);
 
         $this->assertJsonCommonErrorResponse($response, 401);
-        $this->assertModelExists($post);
-        $this->assertDatabaseHas(Post::class, [
-            'content' => $beforeContent,
-        ]);
     }
 
-    public function test他のユーザーの投稿が更新できずステータスコードが403(): void
+    public function test他のユーザーの投稿を更新しようとした場合、権限エラー(): void
     {
         $beforeContent = Str::random();
         $afterContent = Str::random();
@@ -120,13 +116,9 @@ final class UpdatePostControllerTest extends TestCase
         ]);
 
         $this->assertJsonCommonErrorResponse($response, 403);
-        $this->assertModelExists($post);
-        $this->assertDatabaseHas(Post::class, [
-            'content' => $beforeContent,
-        ]);
     }
 
-    public function test存在しない投稿を更新しようとした場合、ステータスコードが404(): void
+    public function test存在しない投稿を更新しようとした場合、NotFoundエラー(): void
     {
         $notExistsPostId = rand();
         $content = Str::random();

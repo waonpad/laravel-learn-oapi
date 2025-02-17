@@ -22,7 +22,7 @@ final class IndexPostControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test投稿のリストが取得され、ステータスコードが200(): void
+    public function test投稿のリストが取得される(): void
     {
         $postsCount = 10;
         $page = 1;
@@ -72,7 +72,7 @@ final class IndexPostControllerTest extends TestCase
         );
     }
 
-    public function test2ページ目の投稿のリストが取得され、ステータスコードが200(): void
+    public function test2ページ目の投稿のリストが取得される(): void
     {
         $postsCount = 30;
         $page = 2;
