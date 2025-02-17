@@ -12,8 +12,7 @@ class ShowPostRequest extends CustomFormRequest
     public function rules(): array
     {
         return [
-            'path' => ['required', 'array'],
-            'path.id' => ['required', 'string', 'min:1'],
+            'path.id' => ['present', 'string', 'min:1'],
         ];
     }
 

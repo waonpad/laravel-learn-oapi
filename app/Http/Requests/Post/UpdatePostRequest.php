@@ -35,9 +35,8 @@ class UpdatePostRequest extends CustomFormRequest
     public function rules(): array
     {
         return [
-            'content' => ['required', 'string', 'max:255'],
-            'path' => ['required', 'array'],
-            'path.id' => ['required', 'string', 'min:1'],
+            'content' => ['present', 'string', 'between:1,255'],
+            'path.id' => ['present', 'string', 'min:1'],
         ];
     }
 

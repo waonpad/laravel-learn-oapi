@@ -36,7 +36,7 @@ class StorePostRequest extends CustomFormRequest
     public function rules(): array
     {
         return [
-            'content' => ['required', 'string', 'max:255'],
+            'content' => ['present', 'string', 'between:1,255'],
         ];
     }
 

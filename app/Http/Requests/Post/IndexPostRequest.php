@@ -12,8 +12,7 @@ class IndexPostRequest extends CustomFormRequest
     public function rules(): array
     {
         return [
-            'query' => ['required', 'array'],
-            'query.page' => ['required', 'integer', 'min:1'],
+            'query.page' => ['present', 'integer', 'min:1'],
         ];
     }
 

@@ -43,9 +43,9 @@ class RegisterRequest extends CustomFormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', Rule::unique('users')],
-            'password' => ['required', 'string', 'confirmed', 'min:8'],
+            'name' => ['present', 'string', 'between:1,255'],
+            'email' => ['present', 'string', 'email', Rule::unique('users')],
+            'password' => ['present', 'string', 'confirmed', 'min:8'],
         ];
     }
 
