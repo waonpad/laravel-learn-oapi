@@ -10,6 +10,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Testing\Fluent\AssertableJson;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use Tests\TestCase;
@@ -23,13 +24,13 @@ final class RegisterControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testユーザーが作成される(): void
+    public function testDBにユーザーとアクセストークンが作成される(): void
     {
         $name = Str::random();
         $email = Str::random().'@example.com';
-        $password = Str::random(8);
+        $password = Str::random();
 
-        // ユーザーの作成,更新日時を固定
+        // ユーザーとアクセストークンの作成,更新日時を固定
         Carbon::setTestNow(Carbon::now());
 
         $response = $this->postJson('/register', [
@@ -39,6 +40,8 @@ final class RegisterControllerTest extends TestCase
             'passwordConfirmation' => $password,
         ]);
 
+        $createdUser = User::where('email', $email)->firstOrFail();
+
         $response->assertStatus(200);
         $this->assertDatabaseHas(User::class, [
             'name' => $name,
@@ -47,13 +50,46 @@ final class RegisterControllerTest extends TestCase
             'created_at' => Carbon::now()->toDateTimeString(),
             'updated_at' => Carbon::now()->toDateTimeString(),
         ]);
+        $this->assertDatabaseHas('personal_access_tokens', [
+            'tokenable_type' => User::class,
+            'tokenable_id' => $createdUser->id,
+            'name' => 'AccessToken',
+            'abilities' => '["*"]',
+            'last_used_at' => null,
+            'expires_at' => null,
+            'created_at' => Carbon::now()->toDateTimeString(),
+            'updated_at' => Carbon::now()->toDateTimeString(),
+        ]);
+    }
+
+    public function testアクセストークンが返却される(): void
+    {
+        $name = Str::random();
+        $email = Str::random().'@example.com';
+        $password = Str::random();
+
+        $response = $this->postJson('/register', [
+            'name' => $name,
+            'email' => $email,
+            'password' => $password,
+            'passwordConfirmation' => $password,
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertJson(
+            fn (AssertableJson $json): AssertableJson => $json->where(
+                // アクセストークンが | で区切られた文字列が返却されることを確認
+                'token',
+                fn ($token): bool => is_string($token) && count(explode('|', $token)) === 2
+            )
+        );
     }
 
     public function test入力したパスワードがハッシュ化されてDBに保存される(): void
     {
         $name = Str::random();
         $email = Str::random().'@example.com';
-        $password = Str::random(8);
+        $password = Str::random();
 
         $this->postJson('/register', [
             'name' => $name,
@@ -76,7 +112,7 @@ final class RegisterControllerTest extends TestCase
     {
         $name = Str::random();
         $email = Str::random().'@example.com';
-        $password = Str::random(8);
+        $password = Str::random();
         $invalidPassword = "invalid{$password}";
 
         $response = $this->postJson('/register', [
@@ -94,7 +130,7 @@ final class RegisterControllerTest extends TestCase
     {
         $name = Str::random();
         $email = Str::random().'@example.com';
-        $password = Str::random(8);
+        $password = Str::random();
 
         $response = $this->postJson('/register', [
             'name' => $name,
@@ -110,7 +146,7 @@ final class RegisterControllerTest extends TestCase
     {
         $name = Str::random();
         $email = Str::random();
-        $password = Str::random(8);
+        $password = Str::random();
 
         $response = $this->postJson('/register', [
             'name' => $name,
@@ -127,7 +163,7 @@ final class RegisterControllerTest extends TestCase
     {
         $name = Str::random();
         $email = Str::random().'@example.com';
-        $password = Str::random(8);
+        $password = Str::random();
 
         User::factory()->create([
             'email' => $email,
