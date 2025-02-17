@@ -85,9 +85,7 @@ return [
     // 変更
     'locale' => env('APP_LOCALE', 'ja'),
 
-    // 'fallback_locale' => env('APP_FALLBACK_LOCALE', 'en'),
-    // 変更
-    'fallback_locale' => env('APP_FALLBACK_LOCALE', 'ja'),
+    'fallback_locale' => env('APP_FALLBACK_LOCALE', 'en'),
 
     // 'faker_locale' => env('APP_FAKER_LOCALE', 'en_US'),
     // 変更
