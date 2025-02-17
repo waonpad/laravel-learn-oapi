@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\DTO\Post;
 
+/**
+ * @phpstan-import-type StorePostInput from \App\Http\Requests\Post\StorePostRequest
+ */
 class StorePostDto
 {
     public readonly string $content;
@@ -11,7 +14,7 @@ class StorePostDto
     public readonly int $user_id;
 
     /**
-     * @param array{content: string, user_id: int} $input
+     * @param StorePostInput $input
      */
     public function __construct(array $input)
     {
@@ -30,7 +33,7 @@ class StorePostDto
     }
 
     /**
-     * @return array{content: string, user_id: int}
+     * @return StorePostInput
      */
     public function toArray(): array
     {

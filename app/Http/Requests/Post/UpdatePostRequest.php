@@ -12,6 +12,7 @@ use OpenApi\Attributes as OA;
 
 /**
  * @phpstan-type ValidatedUpdatePostRequest=array{content: string, path: array{id: non-empty-string}}
+ * @phpstan-type UpdatePostInput=array{content: string}
  */
 #[OA\Schema(
     properties: [

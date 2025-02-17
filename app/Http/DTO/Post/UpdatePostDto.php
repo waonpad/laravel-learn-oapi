@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace App\Http\DTO\Post;
 
+/**
+ * @phpstan-import-type UpdatePostInput from \App\Http\Requests\Post\UpdatePostRequest
+ */
 class UpdatePostDto
 {
     public readonly string $content;
 
     /**
-     * @param array{content: string} $input
+     * @param UpdatePostInput $input
      */
-    public function __construct($input)
+    public function __construct(array $input)
     {
         // @phpstan-ignore isset.offset
         if (!isset($input['content'])) {
@@ -22,7 +25,7 @@ class UpdatePostDto
     }
 
     /**
-     * @return array{content: string}
+     * @return UpdatePostInput
      */
     public function toArray(): array
     {

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\DTO\Auth;
 
+/**
+ * @phpstan-import-type LoginInput from \App\Http\Requests\Auth\LoginRequest
+ */
 class LoginDto
 {
     public readonly string $email;
@@ -11,7 +14,7 @@ class LoginDto
     public readonly string $password;
 
     /**
-     * @param array{email: string, password: string} $input
+     * @param LoginInput $input
      */
     public function __construct(array $input)
     {
@@ -30,7 +33,7 @@ class LoginDto
     }
 
     /**
-     * @return array{email: string, password: string}
+     * @return LoginInput
      */
     public function toArray(): array
     {

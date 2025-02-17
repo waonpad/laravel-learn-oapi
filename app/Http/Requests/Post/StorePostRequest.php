@@ -15,6 +15,7 @@ use OpenApi\Attributes as OA;
 
 /**
  * @phpstan-type ValidatedStorePostRequest=array{content: string}
+ * @phpstan-type StorePostInput=array{content: string, user_id: int}
  */
 #[OA\Schema(
     properties: [

@@ -10,6 +10,7 @@ use OpenApi\Attributes as OA;
 
 /**
  * @phpstan-type ValidatedLoginRequest=array{email: string, password: string}
+ * @phpstan-type LoginInput=ValidatedLoginRequest
  */
 #[OA\Schema(
     properties: [

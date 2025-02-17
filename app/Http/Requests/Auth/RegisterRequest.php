@@ -11,6 +11,7 @@ use OpenApi\Attributes as OA;
 
 /**
  * @phpstan-type ValidatedRegisterRequest=array{name: string, email: string, password: string}
+ * @phpstan-type RegisterInput=ValidatedRegisterRequest
  */
 #[OA\Schema(
     properties: [

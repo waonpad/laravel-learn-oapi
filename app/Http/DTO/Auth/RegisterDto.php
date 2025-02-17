@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\DTO\Auth;
 
+/**
+ * @phpstan-import-type RegisterInput from \App\Http\Requests\Auth\RegisterRequest
+ */
 class RegisterDto
 {
     public readonly string $name;
@@ -13,7 +16,7 @@ class RegisterDto
     public readonly string $password;
 
     /**
-     * @param array{name: string, email: string, password: string} $input
+     * @param RegisterInput $input
      */
     public function __construct(array $input)
     {
@@ -38,7 +41,7 @@ class RegisterDto
     }
 
     /**
-     * @return array{name: string, email: string, password: string}
+     * @return RegisterInput
      */
     public function toArray(): array
     {
