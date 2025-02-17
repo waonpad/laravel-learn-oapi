@@ -58,7 +58,7 @@ final class DestroyPostControllerTest extends TestCase
 
     public function test存在しない投稿を削除しようとした場合、ステータスコードが404(): void
     {
-        $notExistsPostId = 123;
+        $notExistsPostId = rand();
 
         $author = User::factory()->create();
 

@@ -42,7 +42,7 @@ final class ShowPostControllerTest extends TestCase
 
     public function test存在しない投稿IDを指定した場合、ステータスコードが404(): void
     {
-        $notExistsPostId = 123;
+        $notExistsPostId = rand();
 
         $response = $this->getJson("/posts/{$notExistsPostId}");
 

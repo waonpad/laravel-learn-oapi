@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use Tests\TestCase;
@@ -24,9 +25,9 @@ final class RegisterControllerTest extends TestCase
 
     public function testユーザーが作成され、ステータスコードが200(): void
     {
-        $name = 'Test User';
-        $email = 'test@example.com';
-        $password = 'password';
+        $name = Str::random();
+        $email = Str::random().'@example.com';
+        $password = Str::random(8);
 
         // ユーザーの作成,更新日時を固定
         Carbon::setTestNow(Carbon::now());
@@ -50,9 +51,9 @@ final class RegisterControllerTest extends TestCase
 
     public function testユーザーが作成され、入力したパスワードがハッシュ化されてDBに保存される(): void
     {
-        $name = 'Test User';
-        $email = 'test@example.com';
-        $password = 'password';
+        $name = Str::random();
+        $email = Str::random().'@example.com';
+        $password = Str::random(8);
 
         $this->postJson('/register', [
             'name' => $name,
@@ -73,10 +74,13 @@ final class RegisterControllerTest extends TestCase
 
     public function testパスワードが確認用と一致しない場合、ユーザーが作成されずステータスコードが422(): void
     {
-        $name = 'Test User';
-        $email = 'test@example.com';
-        $password = 'password';
-        $invalidPassword = 'invalid-password';
+        $name = Str::random();
+        $email = Str::random().'@example.com';
+
+        $passwordLength = 8;
+
+        $password = Str::random($passwordLength);
+        $invalidPassword = Str::random($passwordLength + 1);
 
         $response = $this->postJson('/register', [
             'name' => $name,

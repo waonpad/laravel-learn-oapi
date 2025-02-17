@@ -26,6 +26,7 @@ final class StorePostControllerTest extends TestCase
     public function test投稿が作成されてステータスコードが201(): void
     {
         $content = Str::random();
+
         $author = User::factory()->create();
         // 投稿の作成,更新日時を固定
         Carbon::setTestNow(Carbon::now());

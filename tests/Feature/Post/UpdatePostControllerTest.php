@@ -128,7 +128,7 @@ final class UpdatePostControllerTest extends TestCase
 
     public function test存在しない投稿を更新しようとした場合、ステータスコードが404(): void
     {
-        $notExistsPostId = 123;
+        $notExistsPostId = rand();
         $content = Str::random();
 
         $author = User::factory()->create();
