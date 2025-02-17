@@ -56,14 +56,17 @@ class LoginController extends Controller
             'password' => $input->password,
         ];
 
-        if (Auth::attempt($credentials)) {
-            /** @var User $user */
-            $user = Auth::user();
-            $token = $user->createToken('AccessToken')->plainTextToken;
+        $authorized = Auth::attempt($credentials);
 
-            return new JsonResponse(['token' => $token], 200);
+        // 認証に失敗した場合はすぐ例外を投げる
+        if (!$authorized) {
+            throw new AuthenticationException();
         }
 
-        throw new AuthenticationException();
+        /** @var User $user */
+        $user = Auth::user();
+        $token = $user->createToken('AccessToken')->plainTextToken;
+
+        return new JsonResponse(['token' => $token], 200);
     }
 }
