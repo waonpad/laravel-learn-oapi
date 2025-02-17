@@ -1,6 +1,8 @@
 # 後からFrankenPHPをインストールするとPHPのバージョンが合わずエラーになるため、FrankenPHPのイメージをベースにする
 FROM dunglas/frankenphp:1.3.6-php8.3.15
 
+ARG PORT=8000
+
 WORKDIR /workspace
 
 ENV TZ=Asia/Tokyo
@@ -34,6 +36,6 @@ COPY . /workspace
 
 RUN composer install --no-dev
 
-EXPOSE 8000
+EXPOSE ${PORT}
 
 CMD ["composer", "start:prod"]
