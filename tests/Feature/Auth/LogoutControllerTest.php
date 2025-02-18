@@ -6,7 +6,6 @@ namespace Tests\Feature\Auth;
 
 use App\Http\Controllers\Auth\LogoutController;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
@@ -19,8 +18,6 @@ use Tests\TestCase;
 #[CoversMethod(LogoutController::class, '__invoke')]
 final class LogoutControllerTest extends TestCase
 {
-    use RefreshDatabase;
-
     public function testアクセストークンが削除される(): void
     {
         $accessTokenTableName = 'personal_access_tokens';

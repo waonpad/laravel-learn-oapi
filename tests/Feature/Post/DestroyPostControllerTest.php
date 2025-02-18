@@ -7,7 +7,6 @@ namespace Tests\Feature\Post;
 use App\Http\Controllers\Post\DestroyPostController;
 use App\Models\Post;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use Tests\TestCase;
@@ -19,8 +18,6 @@ use Tests\TestCase;
 #[CoversMethod(DestroyPostController::class, '__invoke')]
 final class DestroyPostControllerTest extends TestCase
 {
-    use RefreshDatabase;
-
     public function test投稿が削除される(): void
     {
         $author = User::factory()->create();

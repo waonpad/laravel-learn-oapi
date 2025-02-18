@@ -6,7 +6,6 @@ namespace Tests\Feature\Auth;
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Testing\Fluent\AssertableJson;
@@ -21,8 +20,6 @@ use Tests\TestCase;
 #[CoversMethod(LoginController::class, '__invoke')]
 final class LoginControllerTest extends TestCase
 {
-    use RefreshDatabase;
-
     public function testDBにアクセストークンが作成される(): void
     {
         $password = Str::random();

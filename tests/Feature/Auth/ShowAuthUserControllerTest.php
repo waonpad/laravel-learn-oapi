@@ -6,7 +6,6 @@ namespace Tests\Feature\Auth;
 
 use App\Http\Controllers\Auth\ShowAuthUserController;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -20,8 +19,6 @@ use Tests\TestCase;
 #[CoversMethod(ShowAuthUserController::class, '__invoke')]
 final class ShowAuthUserControllerTest extends TestCase
 {
-    use RefreshDatabase;
-
     public function testアクセストークンに紐つくユーザーが返却される(): void
     {
         $user = User::factory()->create();

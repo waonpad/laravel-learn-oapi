@@ -6,7 +6,6 @@ namespace Tests\Feature\Auth;
 
 use App\Http\Controllers\Auth\RegisterController;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -22,8 +21,6 @@ use Tests\TestCase;
 #[CoversMethod(RegisterController::class, '__invoke')]
 final class RegisterControllerTest extends TestCase
 {
-    use RefreshDatabase;
-
     public function testDBにユーザーとアクセストークンが作成される(): void
     {
         $name = Str::random();

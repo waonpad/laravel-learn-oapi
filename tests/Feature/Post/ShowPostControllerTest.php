@@ -7,7 +7,6 @@ namespace Tests\Feature\Post;
 use App\Http\Controllers\Post\ShowPostController;
 use App\Models\Post;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
@@ -20,8 +19,6 @@ use Tests\TestCase;
 #[CoversMethod(ShowPostController::class, '__invoke')]
 final class ShowPostControllerTest extends TestCase
 {
-    use RefreshDatabase;
-
     public function test投稿が取得される(): void
     {
         User::factory()->create();
