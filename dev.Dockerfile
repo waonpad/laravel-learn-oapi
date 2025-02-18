@@ -1,5 +1,5 @@
 # 後からFrankenPHPをインストールするとPHPのバージョンが合わずエラーになるため、FrankenPHPのイメージをベースにする
-FROM dunglas/frankenphp:1.3.6-php8.3.15
+FROM dunglas/frankenphp:1.4.3-php8.3.17
 
 WORKDIR /workspace
 
