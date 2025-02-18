@@ -12,9 +12,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use Tests\TestCase;
 
-/**
- * @internal
- */
 #[CoversClass(IndexPostController::class)]
 #[CoversMethod(IndexPostController::class, '__invoke')]
 final class IndexPostControllerTest extends TestCase

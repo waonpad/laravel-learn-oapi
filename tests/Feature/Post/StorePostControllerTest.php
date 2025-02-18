@@ -13,9 +13,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use Tests\TestCase;
 
-/**
- * @internal
- */
 #[CoversClass(StorePostController::class)]
 #[CoversMethod(StorePostController::class, '__invoke')]
 final class StorePostControllerTest extends TestCase

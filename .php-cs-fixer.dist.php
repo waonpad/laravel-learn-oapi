@@ -24,6 +24,7 @@ return (new Config())
                 'goto',
                 'include',
                 'include_once',
+                // PHPDocで型をつけたいだけなのに空行が入ると見た目が良くないため、除外
                 // 'phpdoc',
                 'require',
                 'require_once',
@@ -35,6 +36,8 @@ return (new Config())
                 'yield_from',
             ],
         ],
+        // パッケージとして公開するわけではないため、不要なルールを無効化
+        'php_unit_internal_class' => false,
     ])
     ->setFinder(
         Finder::create()

@@ -13,9 +13,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use Tests\TestCase;
 
-/**
- * @internal
- */
 #[CoversClass(LoginController::class)]
 #[CoversMethod(LoginController::class, '__invoke')]
 final class LoginControllerTest extends TestCase

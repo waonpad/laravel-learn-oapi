@@ -11,9 +11,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use Tests\TestCase;
 
-/**
- * @internal
- */
 #[CoversClass(LogoutController::class)]
 #[CoversMethod(LogoutController::class, '__invoke')]
 final class LogoutControllerTest extends TestCase

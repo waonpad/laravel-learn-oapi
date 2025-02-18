@@ -14,9 +14,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use Tests\TestCase;
 
-/**
- * @internal
- */
 #[CoversClass(RegisterController::class)]
 #[CoversMethod(RegisterController::class, '__invoke')]
 final class RegisterControllerTest extends TestCase

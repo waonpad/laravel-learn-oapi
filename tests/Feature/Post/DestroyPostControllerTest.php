@@ -11,9 +11,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use Tests\TestCase;
 
-/**
- * @internal
- */
 #[CoversClass(DestroyPostController::class)]
 #[CoversMethod(DestroyPostController::class, '__invoke')]
 final class DestroyPostControllerTest extends TestCase
