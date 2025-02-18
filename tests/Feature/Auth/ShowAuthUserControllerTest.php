@@ -27,7 +27,7 @@ final class ShowAuthUserControllerTest extends TestCase
         $user = User::factory()->create();
         $token = $user->createToken('AccessToken')->plainTextToken;
 
-        $response = $this->getJson('/me', ['Authorization' => "Bearer {$token}"]);
+        $response = $this->withHeaders(['Authorization' => "Bearer {$token}"])->getJson('/me');
 
         /** @var Carbon */
         $emailVerifiedAt = $user->email_verified_at;
@@ -55,7 +55,7 @@ final class ShowAuthUserControllerTest extends TestCase
         $user = User::factory()->create();
         $token = $user->createToken('AccessToken')->plainTextToken;
 
-        $response = $this->getJson('/me', ['Authorization' => "Bearer {$token}"]);
+        $response = $this->withHeaders(['Authorization' => "Bearer {$token}"])->getJson('/me');
 
         $response->assertStatus(200);
         $this->assertDatabaseHas('personal_access_tokens', [
@@ -84,7 +84,7 @@ final class ShowAuthUserControllerTest extends TestCase
         // 不正なトークンを作成
         $invalidToken = Str::random();
 
-        $response = $this->getJson('/me', ['Authorization' => "Bearer {$invalidToken}"]);
+        $response = $this->withHeaders(['Authorization' => "Bearer {$invalidToken}"])->getJson('/me');
 
         $this->assertJsonCommonErrorResponse($response, 401);
     }
