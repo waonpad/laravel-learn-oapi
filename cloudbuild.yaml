@@ -3,6 +3,7 @@ substitutions:
   _SERVICE_REGION: 'asia-northeast1'
   _SERVICE_PORT: '8000'
   _APP_KEY: 'base64:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx='
+  _SENTRY_LARAVEL_DSN: 'null'
 images:
   - 'gcr.io/${PROJECT_ID}/${_SERVICE_NAME}:${COMMIT_SHA}'
 # gcloud builds triggers create でトリガーを作成する際にサービスアカウントの指定が必須になっており、
@@ -17,6 +18,7 @@ steps:
     script: |
       sed -i "s/^APP_KEY=.*/APP_KEY=${_APP_KEY}/" .env.example.production
       sed -i "s/^GC_STORAGE_SQLITE_BUCKET=.*/GC_STORAGE_SQLITE_BUCKET=${_GC_STORAGE_SQLITE_BUCKET}/" .env.example.production
+      sed -i "s/^SENTRY_LARAVEL_DSN=.*/SENTRY_LARAVEL_DSN=${_SENTRY_LARAVEL_DSN}/" .env.example.production
       cp .env.example.production .env.production
       ./env2yml-linux-amd64 .env.production
     automapSubstitutions: true

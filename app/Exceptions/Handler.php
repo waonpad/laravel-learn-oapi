@@ -8,6 +8,7 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Sentry\Laravel\Integration;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Handler
@@ -33,6 +34,9 @@ class Handler
 
         // 処理されなかった例外はここで処理される
         $exceptions->render(function (\Throwable $e, Request $request) {
+            // Sentryに通知
+            Integration::captureUnhandledException($e);
+
             return new JsonResponse([
                 'message' => 'Internal Server Error',
             ], 500);
